@@ -1,0 +1,62 @@
+<% unless @custom_entity %>
+    <%= form_tag(custom_table_path(@custom_table), method: :get, id: 'query_form') do %>
+        <%= hidden_field_tag 'custom_table_id', @custom_table.id %>
+        <%= render partial: 'queries/query_form' %>
+    <% end %>
+<% end %>
+<%= form_tag({}, data: {cm_url: context_menu_custom_entities_path}) do -%>
+    <%= hidden_field_tag 'back_url', url_for(params) %>
+    <div class="autoscroll">
+      <table class="list time-entries">
+        <thead>
+        <tr>
+          <th class="checkbox hide-when-print">
+            <%= check_box_tag 'check_all', '', false, class: 'toggle-selection',
+                              :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+          </th>
+          <% query.inline_columns.each do |column| %>
+              <%= column_header(query, column) %>
+          <% end %>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <% unless @custom_entity %>
+            <%= render_query_totals(@query) %>
+        <% end %>
+        <% grouped_query_results(entities, query) do |entity, group_name, group_count, group_totals| -%>
+            <% if group_name %>
+                <% reset_cycle %>
+                <tr class="group open">
+                  <td colspan="<%= query.inline_columns.size + 1 %>">
+                    <span class="expander" onclick="toggleRowGroup(this);">&nbsp;</span>
+                    <span class="name"><%= group_name %></span> <span class="count"><%= group_count %></span> <span class="totals"><%= group_totals %></span>
+                    <%= link_to_function("#{l(:button_collapse_all)}/#{l(:button_expand_all)}",
+                                         "toggleAllRowGroups(this)", :class => 'toggle-all') %>
+                  </td>
+                </tr>
+            <% end %>
+
+            <tr class="cusotm-entity-<%= cycle("odd", "even") %> hascontextmenu">
+              <td class="checkbox hide-when-print"><%= check_box_tag("ids[]", entity.id, false, id: nil) %></td>
+              <%= raw query.inline_columns.map {|column| "<td class=\"#{column.css_classes}\">#{render_custom_table_content(column, entity)}</td>"}.join %>
+              <td class="buttons">
+                <% if entity.editable?(User.current) %>
+                    <%= link_to l(:button_show), custom_entity_path(entity), title: l(:button_show), class: 'icon-only icon-magnifier' %>
+                    <%= link_to l(:button_edit), edit_custom_entity_path(entity, edit_query: true, back_url: back_url), remote: true, title: l(:button_edit), class: 'icon-only icon-edit' %>
+                    <%= link_to l(:button_delete), custom_entity_path(entity, custom_table_id: @custom_table, project_id: params[:project_id], back_url: back_url), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
+                <% end %>
+              </td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+<% end %>
+<% if @custom_entities %>
+    <span class="pagination"><%= pagination_links_full @entity_pages, @entity_count %></span>
+<% end %>
+
+
+<%= context_menu %>

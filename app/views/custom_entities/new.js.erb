@@ -1,0 +1,2 @@
+$("#ajax-modal").html("<%= escape_javascript(render template: 'custom_entities/new', formats: [:html]) %>");
+showModal('ajax-modal', '80%', '<%= escape_javascript l(:label_custom_entity_new, name: @custom_entity.name.singularize) %>');

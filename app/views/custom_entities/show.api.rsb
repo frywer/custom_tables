@@ -1,0 +1,3 @@
+api.__send__(@custom_entity.custom_table.name.downcase.singularize.gsub(/[^0-9A-Za-z]/, '_')) do
+  render_api_custom_entity @custom_entity, api
+end

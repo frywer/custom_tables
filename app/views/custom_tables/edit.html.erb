@@ -1,0 +1,11 @@
+<%= render_custom_table_tabs custom_table_tabs(@project.id), @tab %>
+
+<h2><%= l(:label_settings) %></h2>
+
+<%= render_tabs @setting_tabs %>
+
+<% html_title(l(:label_settings)) -%>
+
+<% content_for :sidebar do %>
+    <%= render partial: 'sidebar' %>
+<% end %>

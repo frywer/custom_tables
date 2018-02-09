@@ -1,0 +1,4 @@
+<%= labelled_form_for :custom_table, @custom_table, url: custom_tables_path(project_id: @project), html: {multipart: true, id: 'custom_table_form'} do |f|  %>
+    <%= render partial: 'form', locals: {f: f} %>
+    <%= submit_tag l(:button_save) %>
+<% end %>

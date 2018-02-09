@@ -1,0 +1,28 @@
+<%= form_tag(params.slice(:project_id, :id), :method => :get, :id => 'query_form') do %>
+    <div id="query_form_with_buttons" class="hide-when-print">
+      <div id="query_form_content">
+        <fieldset id="filters" class="collapsible <%= query.new_record? ? "" : "collapsed" %>">
+          <legend onclick="toggleFieldset(this);"><%= l(:label_filter_plural) %></legend>
+          <div>
+            <%= render partial: 'queries/filters', locals: {query: query} %>
+          </div>
+        </fieldset>
+        <fieldset id="options" class="collapsible collapsed">
+          <legend onclick="toggleFieldset(this);"><%= l(:label_options) %></legend>
+          <div style="display: none;">
+            <table>
+              <tr>
+                <td class="field"><%= l(:field_column_names) %></td>
+                <td><%= render_query_columns_selection(query) %></td>
+              </tr>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+
+      <p class="buttons">
+        <%= link_to_function l(:button_apply), '$("#query_form").submit()', :class => 'icon icon-checked' %>
+        <%= link_to l(:button_clear), {:project_id => @project, :issue_id => @issue}, :class => 'icon icon-reload'  %>
+      </p>
+    </div>
+<% end %>

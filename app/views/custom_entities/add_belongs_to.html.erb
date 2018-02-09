@@ -1,0 +1,11 @@
+<%= labelled_form_for :custom_entity, @custom_entity, url: custom_entity_path(project_id: params[:project_id]), html: {multipart: true, id: 'custom_entity_form'} do |f|  %>
+    <%= error_messages_for @custom_entity %>
+    <%= hidden_field_tag :back_url, params[:back_url]%>
+
+    <div class="box tabular">
+      <div id="attributes" class="attributes">
+
+      </div>
+    </div>
+    <%= submit_tag l(:button_add) %>
+<% end %>

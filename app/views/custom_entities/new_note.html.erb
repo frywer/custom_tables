@@ -1,0 +1,7 @@
+<%= labelled_form_for :custom_entity, @custom_entity, url: custom_entity_path(project_id: params[:project_id]), mehod: :put, html: {id: 'new_custom_entity_form'} do |f|  %>
+    <fieldset><legend><%= l(:field_notes) %></legend>
+      <%= f.text_area :notes, rows: 5, class: 'wiki-edit', no_label: true %>
+      <%#= wikitoolbar_for 'custom_entity_notes' %>
+    </fieldset>
+    <%= submit_tag l(:button_save) %>
+<% end %>

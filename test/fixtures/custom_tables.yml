@@ -1,0 +1,5 @@
+table_one:
+    id: 1
+    name: Contacts
+    project_id: 1
+    author_id: 1

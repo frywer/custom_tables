@@ -1,0 +1,2 @@
+$("#ajax-modal").html("<%= escape_javascript(render template: 'custom_entities/new_note', formats: [:html]) %>");
+showModal('ajax-modal', '80%', '<%= escape_javascript l(:label_new_note) %>');

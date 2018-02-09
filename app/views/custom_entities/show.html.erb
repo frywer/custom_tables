@@ -1,0 +1,55 @@
+<%= render_custom_table_tabs custom_table_tabs(@project.id), @tab %>
+
+<div class="contextual">
+  <%= call_hook(:view_custom_table_table_field_action_menu) %>
+</div>
+<h2><%= @custom_entity.name.singularize %></h2>
+<div class="issue details">
+
+  <p class="author">
+    <%= authoring @custom_entity.created_on, @custom_entity.author %>.
+    <% if @custom_entity.created_on != @custom_entity.updated_on %>
+        <%= l(:label_updated_time, time_tag(@custom_entity.updated_on)).html_safe %>.
+    <% end %>
+  </p>
+
+  <div class="attributes">
+    <%= render_half_width_custom_fields_rows(@custom_entity) %>
+  </div>
+
+  <% @queries_scope.each do |query| %>
+          <hr />
+          <div class="contextual">
+            <%# TODO finish it %>
+            <%#= link_to l(:label_add), add_belongs_to_custom_entity_path(@custom_entity, back_url: custom_entity_path(@custom_entity), custom_field_id: query[:selected_custom_values].keys.first),remote: true, class: 'icon icon-add'%>
+
+            <%= link_to l(:label_new), new_custom_entity_path(
+                custom_table_id: query[:custom_table_id],
+                project_id: @project.identifier,
+                back_url: custom_entity_path(@custom_entity),
+                custom_entity: {custom_field_values: query[:selected_custom_values]}), remote: true, class: 'icon icon-add' %>
+            <%= call_hook(:view_custom_table_sub_table_action_menu) %>
+          </div>
+          <h2><%= query[:name] %></h2>
+      <% if query[:custom_entities].present? %>
+          <div>
+            <%= render partial: 'custom_tables/query_form', locals: {query: query[:query], entities: query[:custom_entities], back_url: custom_entity_path(@custom_entity)} %>
+          </div>
+      <% end %>
+  <% end %>
+
+  </div>
+  <% if @journals.present? %>
+      <div id="history">
+        <h3><%= l(:label_history) %></h3>
+        <%= render partial: 'history', locals: {entity: @custom_entity, journals: @journals} %>
+      </div>
+  <% end %>
+
+<% content_for :sidebar do %>
+    <%= render partial: 'custom_tables/sidebar' %>
+<% end %>
+
+<% other_formats_links do |f| %>
+    <%= f.link_to 'PDF', :url => params %>
+<% end %>

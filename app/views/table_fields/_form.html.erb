@@ -1,0 +1,118 @@
+<%= error_messages_for 'custom_field' %>
+
+<div class="splitcontentleft">
+<div class="box tabular">
+<p><%= f.select :field_format, custom_field_formats_for_select(@custom_field), {}, :disabled => !@custom_field.new_record? %></p>
+<p><%= f.text_field :name, :size => 50, :required => true %></p>
+<p><%= f.text_area :description, :rows => 7 %></p>
+
+<% if @custom_field.format.multiple_supported %>
+<p>
+  <%= f.check_box :multiple %>
+  <% if !@custom_field.new_record? && @custom_field.multiple %>
+  <em class="info"><%= l(:text_turning_multiple_off) %></em>
+  <% end %>
+</p>
+<% end %>
+
+<%= render_custom_field_format_partial f, @custom_field %>
+
+<%= call_hook(:view_custom_fields_form_upper_box, :custom_field => @custom_field, :form => f) %>
+</div>
+<p><%= submit_tag l(:button_save) %></p>
+</div>
+
+<div class="splitcontentright">
+<div class="box tabular">
+<% case @custom_field.class.name
+when "IssueCustomField" %>
+    <p><%= f.check_box :is_required %></p>
+    <p><%= f.check_box :is_for_all, :data => {:disables => '#custom_field_project_ids input'} %></p>
+    <p><%= f.check_box :is_filter %></p>
+    <% if @custom_field.format.searchable_supported %>
+    <p><%= f.check_box :searchable %></p>
+    <% end %>
+    <p>
+      <label><%= l(:field_visible) %></label>
+      <label class="block">
+        <%= radio_button_tag 'custom_field[visible]', 1, @custom_field.visible?, :id => 'custom_field_visible_on',
+              :data => {:disables => '.custom_field_role input'} %>
+        <%= l(:label_visibility_public) %>
+      </label>
+      <label class="block">
+        <%= radio_button_tag 'custom_field[visible]', 0, !@custom_field.visible?, :id => 'custom_field_visible_off',
+              :data => {:enables => '.custom_field_role input'} %>
+        <%= l(:label_visibility_roles) %>:
+      </label>
+      <% Role.givable.sorted.each do |role| %>
+        <label class="block custom_field_role" style="padding-left:2em;">
+          <%= check_box_tag 'custom_field[role_ids][]', role.id, @custom_field.roles.include?(role), :id => nil %>
+          <%= role.name %>
+        </label>
+      <% end %>
+      <%= hidden_field_tag 'custom_field[role_ids][]', '' %>
+    </p>
+
+<% when "UserCustomField" %>
+    <p><%= f.check_box :is_required %></p>
+    <p><%= f.check_box :visible %></p>
+    <p><%= f.check_box :editable %></p>
+    <p><%= f.check_box :is_filter %></p>
+
+<% when "ProjectCustomField" %>
+    <p><%= f.check_box :is_required %></p>
+    <p><%= f.check_box :visible %></p>
+    <% if @custom_field.format.searchable_supported %>
+    <p><%= f.check_box :searchable %></p>
+    <% end %>
+    <p><%= f.check_box :is_filter %></p>
+
+<% when "VersionCustomField" %>
+    <p><%= f.check_box :is_required %></p>
+    <p><%= f.check_box :is_filter %></p>
+
+<% when "GroupCustomField" %>
+    <p><%= f.check_box :is_required %></p>
+    <p><%= f.check_box :is_filter %></p>
+
+<% when "TimeEntryCustomField" %>
+    <p><%= f.check_box :is_required %></p>
+    <p><%= f.check_box :is_filter %></p>
+
+<% else %>
+    <p><%= f.check_box :is_required %></p>
+    <p><%= f.check_box :is_filter, { checked: true } %></p>
+      <% if User.current.admin? %>
+          <p><%= f.text_field :external_name %></p>
+      <% end %>
+<% end %>
+<%= call_hook(:"view_custom_fields_form_#{@custom_field.type.to_s.underscore}", :custom_field => @custom_field, :form => f) %>
+</div>
+
+<% if @custom_field.is_a?(IssueCustomField) %>
+  <fieldset class="box" id="custom_field_tracker_ids"><legend><%=l(:label_tracker_plural)%></legend>
+  <% Tracker.sorted.each do |tracker| %>
+    <%= check_box_tag "custom_field[tracker_ids][]",
+                      tracker.id,
+                      (@custom_field.trackers.include? tracker),
+                      :id => "custom_field_tracker_ids_#{tracker.id}" %>
+    <label class="no-css" for="custom_field_tracker_ids_<%=tracker.id%>">
+      <%= tracker.name %>
+    </label>
+  <% end %>
+  <%= hidden_field_tag "custom_field[tracker_ids][]", '' %>
+  <p><%= check_all_links 'custom_field_tracker_ids' %></p>
+  </fieldset>
+
+  <fieldset class="box" id="custom_field_project_ids"><legend><%= l(:label_project_plural) %></legend>
+    <% project_ids = @custom_field.project_ids.to_a %>
+    <%= render_project_nested_lists(Project.all) do |p|
+      content_tag('label', check_box_tag('custom_field[project_ids][]', p.id, project_ids.include?(p.id), :id => nil) + ' ' + p)
+    end %>
+    <%= hidden_field_tag('custom_field[project_ids][]', '', :id => nil) %>
+    <p><%= check_all_links 'custom_field_project_ids' %></p>
+  </fieldset>
+<% end %>
+</div>
+
+<% include_calendar_headers_tags %>

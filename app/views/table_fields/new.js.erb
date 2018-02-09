@@ -1,0 +1,4 @@
+$("#ajax-modal").html("<%= escape_javascript(render template: 'table_fields/new', formats: [:html]) %>");
+showModal('ajax-modal', '80%', '<%= escape_javascript l(:label_custom_field_new) %>');
+
+//$('#content').html('<%#= escape_javascript(render template: 'table_fields/new', layout: nil, formats: [:html]) %>')

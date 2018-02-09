@@ -1,0 +1,59 @@
+<%= render_custom_table_tabs custom_table_tabs(@project.id), 'index' %>
+
+<div class="contextual">
+  <%= form_tag({}, method: :get) do %>
+        <label for='name_like'><%= l(:label_search) %>:</label>
+        <%= text_field_tag 'name_like', params[:name_like], size: 30 %>
+        <%= submit_tag l(:button_apply), class: "small", name_like: nil %>
+  <% end %>
+</div>
+
+<%= title l(:label_glad_custom_tables) %>
+
+<%= render partial: 'query_headers', locals: { query: @query } %>
+
+<%= form_tag({}, data: {cm_url: context_menu_custom_tables_path}) do -%>
+    <%= hidden_field_tag 'back_url', url_for(params) %>
+    <div class="autoscroll">
+      <table class="list">
+        <thead>
+        <tr>
+          <th class="checkbox hide-when-print">
+            <%= check_box_tag 'check_all', '', false, class: 'toggle-selection',
+                              :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+          </th>
+          <% @query.inline_columns.each do |column| %>
+              <%= column_header(@query, column) %>
+          <% end %>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <% CustomTable.each_with_level(@custom_tables) do |table, level| %>
+            <tr class="<%= table.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %> hascontextmenu">
+              <td class="checkbox hide-when-print"><%= check_box_tag("ids[]", table.id, false, id: nil) %></td>
+              <%= raw @query.inline_columns.map {|column| "<td class=\"#{column.css_classes}\"><span> #{render_custom_table_content(column, table)}</span></td>"}.join %>
+              <td class="buttons">
+                <% if table.visible? %>
+                    <%= link_to l(:button_show), custom_table_path(table), title: l(:button_show), class: 'icon-only icon-magnifier' %>
+                    <% if table.editable? %>
+                        <%= link_to l(:button_edit), edit_custom_table_path(table), title: l(:button_edit), class: 'icon-only icon-settings' %>
+                        <%= link_to l(:button_delete), custom_table_path(table, back_url: project_custom_tables_path(@project)), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
+                    <% end %>
+                <% end %>
+              </td>
+            </tr>
+        <% end -%>
+        </tbody>
+      </table>
+    </div>
+<% end -%>
+
+<% if CustomTable.editable? %>
+    <% content_for :sidebar do %>
+        <%= render partial: 'sidebar' %>
+    <% end %>
+<% end %>
+
+<%= context_menu %>

@@ -1,0 +1,1 @@
+<p><%= f.select 'parent_table_id', CustomTable.where(project_id: @project.id).pluck(:name, :id) %></p>

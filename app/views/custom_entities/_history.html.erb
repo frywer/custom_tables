@@ -1,0 +1,29 @@
+<% reply_links = entity.notes_addable? %>
+<% journals.each do |journal| %>
+    <div id="change-<%= journal.id %>" class="<%= journal.css_classes %>">
+      <div id="note-<%= journal.indice %>">
+        <h4><a href="#note-<%= journal.indice %>" class="journal-link">#<%= journal.indice %></a>
+          <%= avatar(journal.user, :size => "24") %>
+          <%= authoring journal.created_on, journal.user, :label => :label_updated_time_by %>
+          <%= content_tag('span', l(:field_is_private), :class => 'private') if journal.private_notes? %></h4>
+
+        <% if journal.details.any? %>
+            <ul class="details">
+              <% details_to_strings(journal.visible_details).each do |string| %>
+                  <li><%= string %></li>
+              <% end %>
+            </ul>
+            <% if Setting.thumbnails_enabled? && (thumbnail_attachments = journal_thumbnail_attachments(journal)).any? %>
+                <div class="thumbnails">
+                  <% thumbnail_attachments.each do |attachment| %>
+                      <div><%= thumbnail_tag(attachment) %></div>
+                  <% end %>
+                </div>
+            <% end %>
+        <% end %>
+        <%= render_custom_entity_notes(journal) unless journal.notes.blank? %>
+      </div>
+    </div>
+<% end %>
+
+<% heads_for_wiki_formatter if User.current.allowed_to?(:edit_issue_notes, entity.project) || User.current.allowed_to?(:edit_own_issue_notes, entity.project) %>

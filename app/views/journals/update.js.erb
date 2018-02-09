@@ -1,0 +1,18 @@
+<% custom_entity_note = params[:custom_entity_note] ? render_custom_entity_notes(@journal) : nil %>
+
+<% if @journal.frozen? %>
+$("#change-<%= @journal.id %>").remove();
+<% else %>
+<% if params[:custom_entity_note] %>
+hideModal("#journal-<%= @journal.id %>-form");
+<% render_note = render_custom_entity_notes(@journal) %>
+<% else %>
+<% render_note = render_notes(@journal.issue, @journal, :reply_links => authorize_for('issues', 'edit')) %>
+<% end %>
+$("#journal-<%= @journal.id %>-notes").replaceWith('<%= escape_javascript(render_note) %>');
+$("#journal-<%= @journal.id %>-notes").show();
+$("#journal-<%= @journal.id %>-form").remove();
+
+<% end %>
+
+<%= call_hook(:view_journals_update_js_bottom, { :journal => @journal }) %>

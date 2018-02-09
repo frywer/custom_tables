@@ -1,0 +1,28 @@
+---
+custom_fields_0001:
+  name: Name
+  regexp: ""
+  is_for_all: true
+  is_filter: true
+  type: CustomEntityCustomField
+  id: 1
+  is_required: false
+  field_format: string
+  default_value: ""
+  editable: true
+  position: 2
+  custom_table_id: 1
+
+custom_fields_0002:
+  name: Surname
+  regexp: ""
+  is_for_all: true
+  is_filter: true
+  type: CustomEntityCustomField
+  id: 2
+  is_required: false
+  field_format: string
+  default_value: ""
+  editable: true
+  position: 2
+  custom_table_id: 1

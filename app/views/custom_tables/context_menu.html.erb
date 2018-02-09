@@ -1,0 +1,8 @@
+<ul>
+  <% if @custom_table %>
+      <li><%= context_menu_link l(:button_show), custom_table_path(@custom_table), class: 'icon-show' %></li>
+      <li><%= context_menu_link l(:button_edit), edit_custom_table_path(@custom_table, edit_query: true, back_url: params[:back_url]), class: 'icon-edit', disabled: !@can[:edit] %></li>
+      <li><%= context_menu_link l(:button_delete), custom_table_path(@custom_table), method: :delete, class: 'icon-del', data: {confirm: l(:text_are_you_sure)}, disabled: !@can[:delete] %></li>
+  <% else %>
+  <% end %>
+</ul>

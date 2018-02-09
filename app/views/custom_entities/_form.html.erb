@@ -1,0 +1,29 @@
+<%= error_messages_for @custom_entity %>
+<%= hidden_field_tag :back_url, params[:back_url]%>
+
+<div class="box tabular">
+  <div id="attributes" class="attributes">
+    <% custom_field_values = @custom_entity.custom_field_values %>
+    <% if custom_field_values.present? %>
+        <div class="splitcontent">
+          <div class="splitcontentleft">
+            <% i = 0 %>
+            <% split_on = (custom_field_values.size / 2.0).ceil - 1 %>
+            <% custom_field_values.each do |value| %>
+                <% if value.custom_field.belongs_to_format? %>
+                    <%= hidden_field_tag 'parent_entities_cf_ids[]', value.custom_field.id %>
+                <% end %>
+                <% if value.editable? %>
+                    <p><%= custom_field_tag_with_label :custom_entity, value %></p>
+                <% end %>
+                <% if i == split_on -%>
+                    </div>
+                    <div class="splitcontentright">
+                <% end -%>
+                <% i += 1 %>
+            <% end %>
+            </div>
+            </div>
+    <% end %>
+  </div>
+</div>

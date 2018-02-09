@@ -1,0 +1,12 @@
+<% unless request.format.js? %>
+    <%= render_custom_table_tabs custom_table_tabs(@project.id), @tab || params[:tab] %>
+<% end %>
+
+<%= labelled_form_for :custom_entity, @custom_entity, url: custom_entity_path(project_id: params[:project_id]), html: {multipart: true, id: 'custom_entity_form'} do |f|  %>
+    <%= render partial: 'form', locals: {f: f} %>
+    <%= submit_tag l(:button_update) %>
+<% end %>
+
+<% content_for :sidebar do %>
+    <%= render partial: 'custom_tables/sidebar' %>
+<% end %>

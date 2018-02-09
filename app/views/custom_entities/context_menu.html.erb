@@ -1,0 +1,18 @@
+<% class_name = @custom_entities.first.class.name %>
+<ul>
+  <% if @custom_entity %>
+      <li><%= context_menu_link l(:button_show), custom_entity_path(@custom_entity), class: 'icon-show' %></li>
+      <li><%= context_menu_link l(:button_edit), edit_custom_entity_path(@custom_entity, edit_query: true, back_url: params[:back_url]), remote: true, class: 'icon-edit', disabled: !@can[:edit] %></li>
+  <% else %>
+      <li><%= context_menu_link l(:button_edit), bulk_edit_custom_entities_path(ids: @custom_entity_ids, back_url: @back), remote: true, class: 'icon icon-edit' %></li>
+  <% end %>
+  <li class="folder">
+    <a href="#" class="submenu"><%= l(:field_export) %></a>
+    <ul>
+      <li><%= link_to 'PDF', custom_table_path(ids: @custom_entity_ids, back_url: @back, id: @custom_entities.first.custom_table, format: :pdf), method: :get %></li>
+      <li><%= link_to 'CSV', custom_table_path(ids: @custom_entity_ids, back_url: @back, id: @custom_entities.first.custom_table, format: :csv), method: :get %></li>
+      <%= call_hook(:view_context_menu_custom_entities_export, { ids: @custom_entity_ids, back_url: @back, params: params, class_name: class_name }) %>
+    </ul>
+  </li>
+  <li><%= context_menu_link l(:button_delete), custom_entities_path(ids: @custom_entity_ids, back_url: @back), method: :delete, data: {confirm: l(:text_are_you_sure)}, class: 'icon icon-del', disabled: !@can[:delete] %></li>
+</ul>

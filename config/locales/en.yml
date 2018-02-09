@@ -1,0 +1,28 @@
+# English strings go here for Rails i18n
+en:
+  # my_label: "My label"
+  label_id: ID
+  label_glad_custom_tables: Custom tables
+  label_custom_table_new: New table
+  label_custom_table: Custom table
+  label_table: Table
+  label_custom_table_edit: Edit table
+  glad_custom_tables: Custom tables
+  label_custom_entity_edit: Edit %{name}
+  label_custom_entity_new: New %{name}
+  label_custom_table_tab: '%{name}'
+  button_edit_custom_table: Edit table
+  button_delete_custom_table: Delete table
+  label_custom_field_edit: Edit custom field
+  field_main_custom_field: Main column
+  label_belongs_to: Belongs to
+  field_parent_table: Table
+  label_bulk_edit_selected: Bulk edit selected %{table_name}
+  label_new_column: New column
+  label_all_tables: All tables
+  help_please_configure_table_first: Rows are missing in this table, please configure first %{settings}
+  label_add: Add
+  button_new_comment: New comment
+  label_new_note: New comment
+  field_external_name: External name
+  field_export: Export

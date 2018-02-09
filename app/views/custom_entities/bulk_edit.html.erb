@@ -1,0 +1,22 @@
+<div class="easy-content-page">
+  <h2><%= l(:label_bulk_edit_selected, table_name: @custom_entities.first.custom_table.name.pluralize) %></h2>
+
+  <%= labelled_form_for(:custom_entity, :custom_entity, url: bulk_update_custom_entities_path, html: {id: 'bulk_edit_form', class: 'form-box'}) do |f| %>
+
+      <% @custom_entities.each do |easy_web_application| %>
+          <%= hidden_field_tag 'ids[]', easy_web_application.id  %>
+      <% end %>
+
+      <% back_url_hidden_field_tag %>
+
+      <div class="splitcontent tabular">
+        <% @custom_fields.each do |custom_field| %>
+            <p><label><%= h(custom_field.name) %></label> <%= custom_field_tag_for_bulk_edit('custom_entity', custom_field, @custom_entities) %></p>
+        <% end %>
+      </div>
+
+      <div class="form-actions">
+        <%= submit_tag l(:button_submit), class: 'button-positive' %>
+      </div>
+  <% end %>
+</div>

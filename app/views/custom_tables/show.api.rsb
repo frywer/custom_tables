@@ -1,0 +1,10 @@
+name = @custom_table.name.downcase.singularize.gsub(/[^0-9A-Za-z]/, '_')
+
+api.array name.pluralize.to_sym do
+  @custom_table.custom_entities.each do |custom_entity|
+    api.__send__(name) do
+      render_api_custom_entity custom_entity, api
+    end
+  end
+end
+

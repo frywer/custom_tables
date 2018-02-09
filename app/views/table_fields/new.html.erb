@@ -1,0 +1,27 @@
+<% unless request.format.js? %>
+    <%= render_custom_table_tabs custom_table_tabs(@project.id), @tab || params[:tab] %>
+<% end %>
+
+<%= labelled_form_for :custom_field, @custom_field, url: table_fields_path(project_id: params[:project_id]), html: {id: 'custom_field_form'} do |f| %>
+    <%= render partial: 'form', locals: {f: f} %>
+    <%= hidden_field_tag :type, @custom_field.type %>
+    <%= hidden_field_tag :tab, @tab || params[:tab] %>
+    <%= hidden_field_tag :custom_table_id, params[:custom_table_id] %>
+    <%= hidden_field_tag :back_url, params[:back_url] %>
+    <%= hidden_field_tag :'custom_field[custom_table_id]', params[:custom_table_id] %>
+<% end %>
+
+<%= javascript_tag do %>
+$('#custom_field_field_format').change(function(){
+  $.ajax({
+    url: '<%= new_table_field_path(custom_table_id: params[:custom_table_id], project_id: params[:project_id], format: 'js') %>',
+    type: 'get',
+    data: $('#custom_field_form').serialize(),
+    complete: toggleDisabledInit
+  });
+});
+<% end %>
+
+<% content_for :sidebar do %>
+    <%= render partial: 'custom_tables/sidebar' %>
+<% end %>
