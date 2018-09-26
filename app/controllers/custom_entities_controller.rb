@@ -70,17 +70,11 @@ class CustomEntitiesController < ApplicationController
   end
 
   def create
-    custom_table = CustomTable.find_by(id: params[:custom_entity][:custom_table_id])
-    if (class_name = custom_table.class.name) == 'CustomTable'
-      @custom_entity = CustomEntity.new
-    else
-      @custom_entity = "CustomEntities::#{class_name.split('::').last}".constantize.new
-    end
-    @custom_entity.attributes = { author: User.current, custom_table_id: params[:custom_entity][:custom_table_id] }
+    @custom_entity = CustomEntity.new(author: User.current, custom_table_id: params[:custom_entity][:custom_table_id])
     @custom_entity.safe_attributes = params[:custom_entity]
 
     if params[:parent_entities_cf_ids].present?
-      @custom_entity.parent_entity_ids = params[:custom_entity][:custom_field_values].select {|k, v| params[:parent_entities_cf_ids].include?(k)}.values
+      @custom_entity.parent_entity_ids = params[:custom_entity][:custom_field_values].select {|k, _v| params[:parent_entities_cf_ids].include?(k)}.values
     end
 
     if @custom_entity.save

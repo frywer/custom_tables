@@ -2,12 +2,14 @@
 en:
   # my_label: "My label"
   label_id: ID
+  label_custom_tables: Custom tables
   label_glad_custom_tables: Custom tables
   label_custom_table_new: New table
   label_custom_table: Custom table
   label_table: Table
   label_custom_table_edit: Edit table
   glad_custom_tables: Custom tables
+  custom_tables: Custom tables
   label_custom_entity_edit: Edit %{name}
   label_custom_entity_new: New %{name}
   label_custom_table_tab: '%{name}'

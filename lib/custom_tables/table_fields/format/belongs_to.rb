@@ -1,4 +1,4 @@
-module GladCustomTables
+module CustomTables
   module TableFields
     module Format
 

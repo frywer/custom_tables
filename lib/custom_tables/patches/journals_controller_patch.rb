@@ -1,4 +1,4 @@
-module GladCustomTables
+module CustomTables
   module Patches
     module JournalsControllerPatch
       def self.included(base)
@@ -6,7 +6,7 @@ module GladCustomTables
 
         base.class_eval do
 
-          alias_method_chain :find_journal, :glad_custom_tables
+          alias_method_chain :find_journal, :custom_tables
 
           helper :custom_entities
 
@@ -22,7 +22,7 @@ module GladCustomTables
 
       module InstanceMethods
 
-        def find_journal_with_glad_custom_tables
+        def find_journal_with_custom_tables
           @journal = Journal.find(params[:id])
           @project = @journal.journalized.try(:project) if @journal && @journal.journalized.respond_to?(:project)
         rescue ActiveRecord::RecordNotFound
@@ -34,6 +34,5 @@ module GladCustomTables
   end
 end
 
-unless JournalsController.included_modules.include?(GladCustomTables::Patches::JournalsControllerPatch)
-  JournalsController.send(:include, GladCustomTables::Patches::JournalsControllerPatch)
-end
+JournalsController.send(:include, CustomTables::Patches::JournalsControllerPatch)
+

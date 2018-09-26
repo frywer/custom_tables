@@ -1,4 +1,4 @@
-module GladCustomTables
+module CustomTables
   module Patches
 
     module CustomFieldsHelperPatch
@@ -6,12 +6,12 @@ module GladCustomTables
         base.send(:include, InstanceMethods)
         base.class_eval do
           unloadable
-          alias_method_chain :show_value, :glad_custom_tables
+          alias_method_chain :show_value, :custom_tables
         end
       end
 
       module InstanceMethods
-        def show_value_with_glad_custom_tables(custom_value, html=true)
+        def show_value_with_custom_tables(custom_value, html=true)
           return '' unless custom_value
           case custom_value.custom_field.field_format
           when 'belongs_to'
@@ -42,6 +42,5 @@ module GladCustomTables
   end
 end
 
-unless CustomFieldsHelper.included_modules.include?(GladCustomTables::Patches::CustomFieldsHelperPatch)
-  CustomFieldsHelper.send(:include, GladCustomTables::Patches::CustomFieldsHelperPatch)
-end
+CustomFieldsHelper.send(:include, CustomTables::Patches::CustomFieldsHelperPatch)
+

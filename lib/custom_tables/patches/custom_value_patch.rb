@@ -1,4 +1,4 @@
-module GladCustomTables
+module CustomTables
   module Patches
     module CustomValuePatch
       def self.included(base)
@@ -25,6 +25,4 @@ module GladCustomTables
   end
 end
 
-unless CustomValue.included_modules.include?(GladCustomTables::Patches::CustomValuePatch)
-  CustomValue.send(:include, GladCustomTables::Patches::CustomValuePatch)
-end
+CustomValue.send(:include, CustomTables::Patches::CustomValuePatch)

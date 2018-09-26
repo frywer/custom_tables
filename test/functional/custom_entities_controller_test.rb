@@ -4,7 +4,7 @@ class CustomEntitiesControllerTest < ActionController::TestCase
 
   fixtures :projects
 
-  ActiveRecord::FixtureSet.create_fixtures(Redmine::Plugin.find(:glad_custom_tables).directory + '/test/fixtures/', [:custom_tables])
+  ActiveRecord::FixtureSet.create_fixtures(Redmine::Plugin.find(:custom_tables).directory + '/test/fixtures/', [:custom_tables])
 
   test "should get new" do
     get :new

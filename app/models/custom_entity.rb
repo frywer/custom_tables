@@ -1,7 +1,7 @@
 class CustomEntity < ActiveRecord::Base
   unloadable
   include Redmine::SafeAttributes
-  include GladCustomTables::ActsAsJournalize
+  include CustomTables::ActsAsJournalize
 
   belongs_to :custom_table
   belongs_to :author, class_name: 'User', foreign_key: 'author_id'

@@ -1,4 +1,4 @@
-module GladCustomTables
+module CustomTables
   module ActsAsJournalize
     extend ActiveSupport::Concern
     included do

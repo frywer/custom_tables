@@ -1,15 +1,15 @@
-Redmine::Plugin.register :glad_custom_tables do
-  name 'Glad Custom Tables plugin'
+Redmine::Plugin.register :custom_tables do
+  name 'Custom Tables plugin'
   author 'Ivan Marangoz'
   description 'This is a plugin for Redmine'
-  version '0.0.1'
+  version '0.0.2'
 
 
-  menu :project_menu, :custom_tables, {controller: 'custom_tables', action: 'index'}, caption: :glad_custom_tables, param: :project_id
+  menu :project_menu, :custom_tables, {controller: 'custom_tables', action: 'index'}, caption: :custom_tables, param: :project_id
 
   #menu :application_menu, :glad_custom_tables, {controller: 'custom_tables', action: 'index'}, caption: :glad_custom_tables
 
-   project_module :glad_custom_tables do
+   project_module :custom_tables do
      permission :show_tables, {
        custom_tables: [:index, :show],
        custom_entities: [:index, :show, :context_menu]
@@ -28,6 +28,5 @@ Redmine::Plugin.register :glad_custom_tables do
      }, global: true
    end
 
-  #CustomFieldsHelper::CUSTOM_FIELDS_TABS << {name: 'CustomTableCustomField', partial: 'custom_fields/index', label: :label_glad_custom_tables}
 end
-require 'glad_custom_tables'
+Dir[File.join(File.dirname(__FILE__), '/lib/custom_tables/**/*.rb')].each { |file| require_dependency file }

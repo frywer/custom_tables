@@ -1,5 +1,5 @@
 # run test
-# rspec -Iplugins/glad_custom_tables/spec  plugins/glad_custom_tables/spec
+# rspec -Iplugins/custom_tables/spec  plugins/custom_tables/spec
 
 ENV['RAILS_ENV'] ||= 'test'
 
