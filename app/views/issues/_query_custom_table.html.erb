@@ -1,0 +1,45 @@
+<%= form_tag({}, data: {cm_url: context_menu_custom_entities_path(back_url: back_url)}) do -%>
+  <%= hidden_field_tag 'back_url', back_url %>
+  <div class="autoscroll">
+    <table class="list time-entries">
+      <thead>
+      <tr>
+        <th class="checkbox hide-when-print">
+          <%= check_box_tag 'check_all', '', false, class: 'toggle-selection',
+                            :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+        </th>
+        <% query.inline_columns.each do |column| %>
+          <%= column_header(query, column) %>
+        <% end %>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <%= render_query_totals(query) %>
+      <% grouped_query_results(entities, query) do |entity, _group_name, _group_count, _group_totals| -%>
+        <tr class="cusotm-entity-<%= cycle("odd", "even") %> hascontextmenu">
+          <td class="checkbox hide-when-print"><%= check_box_tag("ids[]", entity.id, false, id: nil) %></td>
+          <%= raw query.inline_columns.map {|column| "<td class=\"#{column.css_classes}\">#{column_content(column, entity)}</td>"}.join %>
+          <td class="buttons">
+            <% if User.current.admin? %>
+              <%= link_to l(:button_show), custom_entity_path(entity), title: l(:button_show), class: 'icon-only icon-magnifier' %>
+            <% end %>
+            <%= link_to l(:button_edit), edit_custom_entity_path(entity, edit_query: true, back_url: back_url), remote: true, title: l(:button_edit), class: 'icon-only icon-edit' %>
+            <%= link_to l(:button_delete), custom_entity_path(entity, custom_table_id: custom_table, back_url: back_url), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% if entities.empty? %>
+    <div class="warning">
+      <p>
+        <strong><%= l(:label_no_data) %></strong>
+      </p>
+    </div>
+  <% end  %>
+<% end %>
+
+<%= context_menu %>

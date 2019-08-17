@@ -7,7 +7,7 @@
           <%= hidden_field_tag 'ids[]', easy_web_application.id  %>
       <% end %>
 
-      <% back_url_hidden_field_tag %>
+      <%= hidden_field_tag :back_url, params[:back_url] %>
 
       <div class="splitcontent tabular">
         <% @custom_fields.each do |custom_field| %>

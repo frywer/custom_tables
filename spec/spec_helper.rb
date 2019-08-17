@@ -1,5 +1,5 @@
 # run test
-# rspec -Iplugins/custom_tables/spec  plugins/custom_tables/spec
+# rspec -Iplugins/custom_tables/spec  plugins/glad_custom_tables/spec
 
 ENV['RAILS_ENV'] ||= 'test'
 
@@ -9,11 +9,11 @@ if ENV['COVERAGE']
   SimpleCov.start 'rails' do
     coverage_dir 'tmp/coverage'
 ###    require "pry"
-###    binding.pry
-    #exclude core dirs coverage
+
+#exclude core dirs coverage
     add_filter do |file|
-      file.filename.include?('/lib/plugins/') || 
-        !file.filename.include?('/plugins/')
+      file.filename.include?('/lib/plugins/') ||
+          !file.filename.include?('/plugins/')
     end
   end
 end
@@ -26,7 +26,7 @@ require 'rspec/rails'
 # require 'rspec/autorun'
 require 'rspec/mocks'
 require 'rspec/mocks/standalone'
-require 'factory_girl'
+require 'factory_bot'
 require 'capybara/rspec'
 
 # use phantom.js as js driver
@@ -38,10 +38,11 @@ WebMock.disable_net_connect!(allow_localhost: true)
 #   require plugin_factory
 # end
 
-require 'factories/factories'
+require_relative 'factories/factories'
+require_relative 'support/user'
 
-# FactoryGirl.definition_file_paths << File.expand_path('./factories', __FILE__)
-# FactoryGirl.find_definitions
+# FactoryBot.definition_file_paths << File.expand_path('./factories', __FILE__)
+# FactoryBot.find_definitions
 
 module AssertSelectRoot
   def document_root_element
@@ -54,6 +55,7 @@ RSpec.configure do |config|
   config.mock_with :rspec
   config.filter_run :focus => true
   config.run_all_when_everything_filtered = true
+  config.default_path = 'plugins/custom_tables/spec'
   config.fixture_path = "#{::Rails.root}/test/fixtures"
   config.use_transactional_fixtures = true
   config.infer_spec_type_from_file_location!
@@ -64,18 +66,14 @@ RSpec.configure do |config|
     unless meta[:null]
 
       allow( User ).to receive(:current).and_return case meta[:logged]
-                  when :admin
-                    FactoryGirl.create(:admin_user, :language => 'en')
-                  when true
-                    FactoryGirl.create(:user, :language => 'en')
-                  else
-                    User.anonymous
-                  end
+                                                    when :admin
+                                                      FactoryBot.create(:admin_user, :language => 'en')
+                                                    when true
+                                                      FactoryBot.create(:user, :language => 'en')
+                                                    else
+                                                      User.anonymous
+                                                    end
     end
   end
 
 end
-
-
-
-ActiveRecord::Migration.maintain_test_schema!

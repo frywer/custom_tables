@@ -18,7 +18,7 @@ Installation and Setup
 ```
 $ git clone https://github.com/frywer/custom_tables.git
 ```
-* If you downloaded a tarball / zip from master branch, make sure you rename the extracted folder to `glad_custom_tables`
+* If you downloaded a tarball / zip from master branch, make sure you rename the extracted folder to `custom_tables`
 * You have to run the plugin rake task to provide the assets (from the Redmine root directory):
 ```
 $ rake redmine:plugins:migrate RAILS_ENV=production

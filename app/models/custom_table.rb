@@ -1,8 +1,6 @@
 class CustomTable < ActiveRecord::Base
-  unloadable
   include Redmine::SafeAttributes
 
-  # belongs_to :project
   belongs_to :author, class_name: 'User', foreign_key: 'author_id'
   has_many :custom_fields, dependent: :destroy
   has_many :custom_entities, dependent: :destroy
@@ -66,5 +64,13 @@ class CustomTable < ActiveRecord::Base
     else
       custom_fields.first
     end
+  end
+
+  def entities_query
+    query = CustomEntityQuery.new(name: '_', custom_table_id: id)
+    visible_cfs = custom_fields.visible.sorted
+    query.column_names ||= visible_cfs.map {|i| "cf_#{i.id}"}
+    query.totalable_names ||= visible_cfs.select(&:totalable?).map {|i| "cf_#{i.id}"}
+    query
   end
 end

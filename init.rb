@@ -2,7 +2,7 @@ Redmine::Plugin.register :custom_tables do
   name 'Custom Tables plugin'
   author 'Ivan Marangoz'
   description 'This is a plugin for Redmine'
-  version '0.0.2'
+  version '1.0'
 
 
   # menu :project_menu, :custom_tables, {controller: 'custom_tables', action: 'index'}, caption: :custom_tables, param: :project_id
@@ -31,7 +31,7 @@ Redmine::Plugin.register :custom_tables do
 end
 
 Redmine::MenuManager.map :admin_menu do |menu|
-  menu.push :custom_tables, :custom_tables_path, :caption => :label_custom_tables,
+  menu.push :custom_tables, :custom_tables_path, caption: :label_custom_tables,
             :html => {:class => 'icon icon-package'}
 end
 

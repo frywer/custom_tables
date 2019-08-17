@@ -9,7 +9,7 @@ module CustomTables
           # Returns a scope of all custom tables enabled for project issues
           # (explicitly associated custom tables and custom tables enabled for all projects)
           def all_issue_custom_tables
-            @all_issue_custom_fields ||= CustomTable.
+            CustomTable.
                 sorted.
                 where("is_for_all = ? OR id IN (?)", true, custom_table_ids)
           end

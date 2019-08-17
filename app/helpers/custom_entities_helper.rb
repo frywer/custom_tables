@@ -11,7 +11,7 @@ module CustomEntitiesHelper
   end
 
   def render_api_custom_entity(custom_entity, api)
-    return if custom_entity.custom_values.empty?
+    return if custom_entity.custom_values.empty? || custom_value.custom_field.external_name.blank?
 
       custom_entity.custom_values.each do |custom_value|
         api.__send__(custom_value.custom_field.external_name, custom_value.value)

@@ -4,9 +4,9 @@ class CustomTablesController < ApplicationController
 
   helper :sort
   include SortHelper
-  include TimelogHelper
+  # include TimelogHelper
   helper :custom_fields
-  include CustomFieldsHelper
+  # include CustomFieldsHelper
   helper :queries
   include QueriesHelper
   helper :issues
@@ -14,7 +14,7 @@ class CustomTablesController < ApplicationController
   helper :custom_entities
   helper :settings
   helper :custom_tables_pdf
-  include SettingsHelper
+  # include SettingsHelper
 
   before_action :find_custom_table, only: [:edit, :update, :show, :destroy, :setting_tabs]
   before_action :authorize_global
@@ -48,9 +48,8 @@ class CustomTablesController < ApplicationController
   end
 
   def show
-    @query = CustomEntityQuery.build_from_params(params.merge(custom_table_id: params[:id]))
-    @query.column_names ||= @custom_table.custom_fields.order(:position).map {|i| "cf_#{i.id}"}
-    @query.totalable_names ||= @custom_table.custom_fields.select(&:totalable?).map {|i| "cf_#{i.id}"}
+    @query = @custom_table.entities_query
+    @query.build_from_params(params.except(:id))
     @query.sort_criteria ||= 'created_at:desc'
     sort_init @query.sort_criteria.presence || [['spent_on', 'desc']]
     sort_update(@query.sortable_columns)
@@ -174,7 +173,7 @@ class CustomTablesController < ApplicationController
   end
 
   def export_custom_entities
-    @custom_entities = CustomEntity.find_by(id: params[:ids])
+    @custom_entities = CustomEntity.where(id: params[:ids]) if params[:ids]
   end
 
 end

@@ -6,5 +6,6 @@ class AddAssociationCustomTableProject < ActiveRecord::Migration[5.2]
       t.belongs_to :project
     end
     add_column :custom_tables, :is_for_all, :boolean
+    add_reference :custom_entities, :issue
   end
 end

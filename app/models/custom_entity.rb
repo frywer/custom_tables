@@ -5,6 +5,7 @@ class CustomEntity < ActiveRecord::Base
   belongs_to :custom_table
   belongs_to :author, class_name: 'User', foreign_key: 'author_id'
   has_one :project, through: :custom_table
+  belongs_to :issue
 
   has_and_belongs_to_many :parent_entities,
                           class_name: "CustomEntity",
@@ -18,7 +19,7 @@ class CustomEntity < ActiveRecord::Base
                           foreign_key: :parent_entity_id,
                           association_foreign_key: :sub_entity_id
 
-  safe_attributes 'custom_table_id', 'author_id', 'custom_field_values', 'custom_fields', 'parent_entity_ids', 'sub_entity_ids'
+  safe_attributes 'custom_table_id', 'author_id', 'custom_field_values', 'custom_fields', 'parent_entity_ids', 'sub_entity_ids', 'issue_id'
 
   after_destroy :destroy_values
   acts_as_customizable
@@ -46,34 +47,38 @@ class CustomEntity < ActiveRecord::Base
     nil
   end
 
-  # # TODO fix it
-  # def visible?(user = nil)
-  #   true
-  # end
-  #
-  # # TODO fix it
-  # def editable?(user = User.current)
-  #   true
-  # end
-  #
-  # # TODO fix it
-  # def deletable?(user = nil)
-  #   true
-  # end
-  #
-  # def leaf?
-  #   false
-  # end
-  #
-  # def is_descendant_of?(p)
-  #   false
-  # end
+  # TODO fix it
+  def visible?(user = nil)
+    true
+  end
+
+  # TODO fix it
+  def editable?(user = User.current)
+    true
+  end
+
+  # TODO fix it
+  def deletable?(user = nil)
+    true
+  end
+
+  def leaf?
+    false
+  end
+
+  def is_descendant_of?(p)
+    false
+  end
 
   def main_custom_field
     custom_table.main_custom_field
   end
 
   def each_notification(users, &block)
+  end
+
+  def notified_users
+    []
   end
 
   def attachments

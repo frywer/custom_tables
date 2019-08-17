@@ -1,6 +1,6 @@
-#TODO put in development mode
+
 gem 'webmock'
-gem 'factory_girl_rails'
+gem 'factory_bot_rails'
 gem 'rspec-rails'
 gem 'poltergeist'
 gem 'database_cleaner', '~> 1.6.1'

@@ -1,5 +1,6 @@
 <%= error_messages_for @custom_entity %>
-<%= hidden_field_tag :back_url, params[:back_url]%>
+<%= hidden_field_tag :back_url, params[:back_url] %>
+<%= f.hidden_field(:issue_id, value: params[:issue_id]) if params[:issue_id]%>
 
 <div class="box tabular">
   <div id="attributes" class="attributes">
