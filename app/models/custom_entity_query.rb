@@ -68,21 +68,21 @@ class CustomEntityQuery < Query
     end
   end
 
-  def sql_for_issue_id_field(field, operator, value)
+  def sql_for_issue_id_field(_field, operator, value)
     case operator
     when "="
-      "#{TimeEntry.table_name}.issue_id = #{value.first.to_i}"
+      "#{CustomEntity.table_name}.issue_id = #{value.first.to_i}"
     when "~"
       issue = Issue.where(:id => value.first.to_i).first
       if issue && (issue_ids = issue.self_and_descendants.pluck(:id)).any?
-        "#{TimeEntry.table_name}.issue_id IN (#{issue_ids.join(',')})"
+        "#{CustomEntity.table_name}.issue_id IN (#{issue_ids.join(',')})"
       else
         "1=0"
       end
     when "!*"
-      "#{TimeEntry.table_name}.issue_id IS NULL"
+      "#{CustomEntity.table_name}.issue_id IS NULL"
     when "*"
-      "#{TimeEntry.table_name}.issue_id IS NOT NULL"
+      "#{CustomEntity.table_name}.issue_id IS NOT NULL"
     end
   end
 

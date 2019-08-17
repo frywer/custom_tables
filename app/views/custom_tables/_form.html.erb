@@ -1,16 +1,31 @@
 <%= error_messages_for @custom_table %>
-
-<div class = "box tabular" id="contact_data">
-  <p><%= f.text_field :name %></p>
+<div class="splitcontentleft">
+  <fieldset class="box"><legend><%= l :label_general %></legend>
+    <div class = "tabular" >
+      <p><%= f.text_field :name %></p>
+    </div>
+  </fieldset>
 </div>
-<fieldset class="box"><legend><%= toggle_checkboxes_link("#custom_table_project_ids input[type=checkbox]:enabled") %><%= l(:label_project_plural) %></legend>
-  <p><%= f.check_box :is_for_all, :data => {:disables => '#custom_table_project_ids input'} %></p>
 
-  <div id="custom_table_project_ids">
-    <% project_ids = @custom_table.project_ids.to_a %>
-    <%= render_project_nested_lists(Project.all) do |p|
-      content_tag('label', check_box_tag('custom_table[project_ids][]', p.id, project_ids.include?(p.id), :id => nil) + ' ' + p)
-    end %>
-    <%= hidden_field_tag('custom_table[project_ids][]', '', :id => nil) %>
-  </div>
-</fieldset>
+<div class="splitcontentright">
+  <fieldset class="box"><legend><%= toggle_checkboxes_link("#custom_table_project_ids input[type=checkbox]:enabled") %><%= l(:label_project_plural) %></legend>
+    <p><%= f.check_box :is_for_all, onclick: "window.AllProjects.toggle($(this).is(':checked'))"  %></p>
+
+    <div id="custom_table_project_checkbox">
+      <% project_ids = @custom_table.project_ids.to_a %>
+      <%= render_project_nested_lists(Project.all) do |p|
+        content_tag('label', check_box_tag('custom_table[project_ids][]', p.id, project_ids.include?(p.id), :id => nil, class: 'custom_table_project_checkbox') + ' ' + p)
+      end %>
+      <%= hidden_field_tag('custom_table[project_ids][]', '', :id => nil) %>
+    </div>
+  </fieldset>
+</div>
+
+<script type="text/javascript">
+    window.AllProjects = {
+        toggle: function(checked){
+            $(".custom_table_project_checkbox").prop('disabled', checked);
+        },
+
+    }
+</script>
