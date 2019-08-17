@@ -11,10 +11,10 @@
   <fieldset class="box"><legend><%= toggle_checkboxes_link("#custom_table_project_ids input[type=checkbox]:enabled") %><%= l(:label_project_plural) %></legend>
     <p><%= f.check_box :is_for_all, onclick: "window.AllProjects.toggle($(this).is(':checked'))"  %></p>
 
-    <div id="custom_table_project_checkbox">
+    <div id="custom_field_project_ids">
       <% project_ids = @custom_table.project_ids.to_a %>
       <%= render_project_nested_lists(Project.all) do |p|
-        content_tag('label', check_box_tag('custom_table[project_ids][]', p.id, project_ids.include?(p.id), :id => nil, class: 'custom_table_project_checkbox') + ' ' + p)
+        content_tag('label', check_box_tag('custom_table[project_ids][]', p.id, project_ids.include?(p.id), :id => nil, class: 'custom_table_project_checkbox', disabled: f.object.is_for_all) + ' ' + p)
       end %>
       <%= hidden_field_tag('custom_table[project_ids][]', '', :id => nil) %>
     </div>
@@ -26,6 +26,5 @@
         toggle: function(checked){
             $(".custom_table_project_checkbox").prop('disabled', checked);
         },
-
     }
 </script>

@@ -66,11 +66,13 @@ class CustomTable < ActiveRecord::Base
     end
   end
 
-  def entities_query
+  def query(totalable_all: false)
     query = CustomEntityQuery.new(name: '_', custom_table_id: id)
     visible_cfs = custom_fields.visible.sorted
     query.column_names ||= visible_cfs.map {|i| "cf_#{i.id}"}
-    query.totalable_names ||= visible_cfs.select(&:totalable?).map {|i| "cf_#{i.id}"}
+    if totalable_all
+      query.totalable_names = visible_cfs.select(&:totalable?).map {|i| "cf_#{i.id}"}
+    end
     query
   end
 end

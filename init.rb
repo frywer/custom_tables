@@ -4,13 +4,9 @@ Redmine::Plugin.register :custom_tables do
   description 'This is a plugin for Redmine'
   version '1.0'
 
-   project_module :custom_tables do
-
-     permission :view_and_manage_entities, {
-       custom_entities: [:new, :edit, :create, :update, :destroy, :context_menu, :bulk_edit, :bulk_update],
-     }, global: true
-
-   end
+  permission :manage_custom_tables, {
+      custom_entities: [:new, :edit, :create, :update, :destroy, :context_menu, :bulk_edit, :bulk_update],
+  }, global: true
 
 end
 

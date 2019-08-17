@@ -1,3 +1,4 @@
+<%= render_query_totals(query) %>
 <%= form_tag({}, data: {cm_url: context_menu_custom_entities_path(back_url: back_url)}) do -%>
   <%= hidden_field_tag 'back_url', back_url %>
   <div class="autoscroll">
@@ -15,8 +16,6 @@
       </tr>
       </thead>
       <tbody>
-
-      <%= render_query_totals(query) %>
       <% grouped_query_results(entities, query) do |entity, _group_name, _group_count, _group_totals| -%>
         <tr class="cusotm-entity-<%= cycle("odd", "even") %> hascontextmenu">
           <td class="checkbox hide-when-print"><%= check_box_tag("ids[]", entity.id, false, id: nil) %></td>
@@ -33,6 +32,7 @@
       </tbody>
     </table>
   </div>
+
   <% if entities.empty? %>
     <div class="warning">
       <p>

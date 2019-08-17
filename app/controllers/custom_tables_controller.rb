@@ -48,7 +48,7 @@ class CustomTablesController < ApplicationController
   end
 
   def show
-    @query = @custom_table.entities_query
+    @query = @custom_table.query
     @query.build_from_params(params.except(:id))
     @query.sort_criteria ||= 'created_at:desc'
     sort_init @query.sort_criteria.presence || [['spent_on', 'desc']]
