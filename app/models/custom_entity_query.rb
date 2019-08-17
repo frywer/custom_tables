@@ -54,7 +54,7 @@ class CustomEntityQuery < Query
           .joins(:custom_values)
           .where(custom_table_id: custom_table_id)
           .where('LOWER(custom_values.value) LIKE LOWER(:p)', p: "%#{options[:pattern]}%")
-          .uniq
+          .distinct
           .limit(options[:limit])
           .order(order_option)
           .joins(joins_for_order_statement(order_option.join(',')))
@@ -73,7 +73,7 @@ class CustomEntityQuery < Query
     when "="
       "#{CustomEntity.table_name}.issue_id = #{value.first.to_i}"
     when "~"
-      issue = Issue.where(:id => value.first.to_i).first
+      issue = Issue.where(id: value.first.to_i).first
       if issue && (issue_ids = issue.self_and_descendants.pluck(:id)).any?
         "#{CustomEntity.table_name}.issue_id IN (#{issue_ids.join(',')})"
       else

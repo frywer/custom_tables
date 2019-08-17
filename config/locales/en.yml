@@ -28,3 +28,4 @@ en:
   label_new_note: New comment
   field_external_name: External name
   field_export: Export
+  text_missing_permission_manage_custom_tables: No permission to manage custom tables!

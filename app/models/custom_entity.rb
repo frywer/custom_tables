@@ -4,7 +4,7 @@ class CustomEntity < ActiveRecord::Base
 
   belongs_to :custom_table
   belongs_to :author, class_name: 'User', foreign_key: 'author_id'
-  has_one :project, through: :custom_table
+  has_one :project, through: :issue
   belongs_to :issue
 
   has_and_belongs_to_many :parent_entities,
@@ -47,19 +47,17 @@ class CustomEntity < ActiveRecord::Base
     nil
   end
 
-  # TODO fix it
-  def visible?(user = nil)
-    true
-  end
-
-  # TODO fix it
   def editable?(user = User.current)
-    true
+    return true if user.admin? || custom_table.is_for_all
+    user.allowed_to?(:edit_issues, issue.project)
   end
 
-  # TODO fix it
+  def visible?(user = nil)
+    user.allowed_to?(:view_and_manage_entities, nil, true)
+  end
+
   def deletable?(user = nil)
-    true
+    editable?
   end
 
   def leaf?

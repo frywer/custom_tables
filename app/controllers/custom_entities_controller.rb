@@ -22,7 +22,6 @@ class CustomEntitiesController < ApplicationController
   before_action :find_journals, only: :show
 
   def index
-
     respond_to do |format|
       format.html
       format.api
@@ -31,8 +30,7 @@ class CustomEntitiesController < ApplicationController
 
   def show
     @queries_scope = []
-    retrieve_sub_tables_query
-
+    # retrieve_sub_tables_query
     respond_to do |format|
       format.js
       format.html
@@ -64,10 +62,10 @@ class CustomEntitiesController < ApplicationController
     @custom_entity = CustomEntity.new(author: User.current, custom_table_id: params[:custom_entity][:custom_table_id])
     @custom_entity.safe_attributes = params[:custom_entity]
 
-    if params[:parent_entities_cf_ids].present?
-      @custom_entity.parent_entity_ids = params[:custom_entity][:custom_field_values]
-                                             .select {|k, _v| params[:parent_entities_cf_ids].include?(k)}.values
-    end
+    # if params[:parent_entities_cf_ids].present?
+    #   @custom_entity.parent_entity_ids = params[:custom_entity][:custom_field_values]
+    #                                          .select {|k, _v| params[:parent_entities_cf_ids].include?(k)}.values
+    # end
 
     if @custom_entity.save
       flash[:notice] = l(:notice_successful_create)
@@ -96,10 +94,10 @@ class CustomEntitiesController < ApplicationController
   def update
     @custom_entity.init_journal(User.current)
     @custom_entity.safe_attributes = params[:custom_entity]
-    if params[:parent_entities_cf_ids].present?
-      @custom_entity.parent_entity_ids = params[:custom_entity][:custom_field_values]
-                                             .select {|k, _v| params[:parent_entities_cf_ids].include?(k)}.values
-    end
+    # if params[:parent_entities_cf_ids].present?
+    #   @custom_entity.parent_entity_ids = params[:custom_entity][:custom_field_values]
+    #                                          .select {|k, _v| params[:parent_entities_cf_ids].include?(k)}.values
+    # end
 
     if @custom_entity.save
       flash[:notice] = l(:notice_successful_update)
@@ -196,25 +194,25 @@ class CustomEntitiesController < ApplicationController
 
   private
 
-  def retrieve_sub_tables_query
-    return unless (sub_table_ids = CustomEntityCustomField.where(parent_table_id: @custom_entity.custom_table_id).uniq.pluck(:custom_table_id))
-    sub_tables = CustomTable.where(id: sub_table_ids)
-    sub_tables.each do |table|
-      cf_selected_ids = table.custom_fields.where(parent_table_id: @custom_entity.custom_table.id).pluck(:id)
-      params[:c] = table.custom_fields.map {|i| "cf_#{i.id}"}
-      query = CustomEntityQuery.build_from_params(params.merge(custom_table_id: table.id))
-      sort_init query.sort_criteria.presence || [['spent_on', 'desc']]
-      sort_update(query.sortable_columns)
-
-      @queries_scope << {
-        name: table.name,
-        query: query,
-        custom_entities: query.results_scope(order: sort_clause, entity_ids: (@custom_entity.sub_entities & table.custom_entities).map(&:id)),
-        custom_table_id: table.id,
-        selected_custom_values: cf_selected_ids.collect {|a| {a.to_s => @custom_entity.id.to_s}}.inject(:merge)
-      }
-    end
-  end
+  # def retrieve_sub_tables_query
+  #   return unless (sub_table_ids = CustomEntityCustomField.where(parent_table_id: @custom_entity.custom_table_id).uniq.pluck(:custom_table_id))
+  #   sub_tables = CustomTable.where(id: sub_table_ids)
+  #   sub_tables.each do |table|
+  #     cf_selected_ids = table.custom_fields.where(parent_table_id: @custom_entity.custom_table.id).pluck(:id)
+  #     params[:c] = table.custom_fields.map {|i| "cf_#{i.id}"}
+  #     query = CustomEntityQuery.build_from_params(params.merge(custom_table_id: table.id))
+  #     sort_init query.sort_criteria.presence || [['spent_on', 'desc']]
+  #     sort_update(query.sortable_columns)
+  #
+  #     @queries_scope << {
+  #       name: table.name,
+  #       query: query,
+  #       custom_entities: query.results_scope(order: sort_clause, entity_ids: (@custom_entity.sub_entities & table.custom_entities).map(&:id)),
+  #       custom_table_id: table.id,
+  #       selected_custom_values: cf_selected_ids.collect {|a| {a.to_s => @custom_entity.id.to_s}}.inject(:merge)
+  #     }
+  #   end
+  # end
 
   def find_journals
     @journals = @custom_entity.journals.preload(:journalized, :user, :details).reorder("#{Journal.table_name}.id ASC").to_a
@@ -225,6 +223,7 @@ class CustomEntitiesController < ApplicationController
 
   def find_custom_entity
     @custom_entity = CustomEntity.find(params[:id])
+    render_403 unless @custom_entity.editable?
   rescue ActiveRecord::RecordNotFound
     render_404
   end

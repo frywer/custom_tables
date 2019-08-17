@@ -1,18 +1,26 @@
-<% issue.project.all_issue_custom_tables.each do |custom_table| %>
-  <% query = custom_table.entities_query %>
-  <% query.add_short_filter('issue_id', "=#{issue.id}") %>
-  <% back_url = issue_path(issue) %>
-  <hr />
-  <div class="contextual">
-    <%= link_to l(:button_add), new_custom_entity_path(
-        custom_table_id: custom_table.id,
+<% if User.current.allowed_to?(:view_and_manage_entities, nil, global: true) %>
+  <% issue.project.all_issue_custom_tables.each do |custom_table| %>
+    <% query = custom_table.entities_query %>
+    <% query.add_short_filter('issue_id', "=#{issue.id}") %>
+    <% back_url = issue_path(issue) %>
+    <hr />
+    <div class="contextual">
+      <%= link_to l(:button_add), new_custom_entity_path(
+          custom_table_id: custom_table.id,
+          back_url: back_url,
+          issue_id: issue.id), remote: true %>
+    </div>
+    <p><strong><%= custom_table.name %></strong></p>
+    <%= render partial: 'query_custom_table', locals: {
+        query: query,
+        custom_table: custom_table,
         back_url: back_url,
-        issue_id: issue.id), remote: true %>
+        entities: query.results_scope} %>
+  <% end %>
+<% elsif issue.project.all_issue_custom_tables.any? %>
+  <div class="warning">
+    <p>
+      <strong><%= l(:text_missing_permission_manage_custom_tables) %></strong>
+    </p>
   </div>
-  <p><strong><%= custom_table.name %></strong></p>
-  <%= render partial: 'query_custom_table', locals: {
-      query: query,
-      custom_table: custom_table,
-      back_url: back_url,
-      entities: query.results_scope} %>
 <% end %>

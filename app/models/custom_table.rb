@@ -35,7 +35,7 @@ class CustomTable < ActiveRecord::Base
   end
 
   def self.visible?
-    @visible ||= User.current.allowed_to?(:show_tables, nil, global: true)
+    User.current.admin?
   end
 
   def visible?
@@ -43,7 +43,7 @@ class CustomTable < ActiveRecord::Base
   end
 
   def self.editable?
-    @editable ||= User.current.allowed_to?(:manage_tables, nil, global: true)
+    User.current.admin?
   end
 
   def editable?
@@ -51,7 +51,7 @@ class CustomTable < ActiveRecord::Base
   end
 
   def self.deletable?
-    @deletable ||= User.current.allowed_to?(:manage_tables, nil, global: true)
+    User.current.admin?
   end
 
   def deletable?
