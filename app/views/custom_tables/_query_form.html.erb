@@ -1,11 +1,11 @@
 <% unless @custom_entity %>
     <%= form_tag(custom_table_path(@custom_table), method: :get, id: 'query_form') do %>
         <%= hidden_field_tag 'custom_table_id', @custom_table.id %>
-        <%= render partial: 'queries/query_form' %>
+        <%= render partial: 'query_headers' %>
     <% end %>
 <% end %>
 <%= form_tag({}, data: {cm_url: context_menu_custom_entities_path}) do -%>
-    <%= hidden_field_tag 'back_url', url_for(params) %>
+    <%= hidden_field_tag 'back_url', url_for(params.permit!) %>
     <div class="autoscroll">
       <table class="list time-entries">
         <thead>
@@ -42,11 +42,9 @@
               <td class="checkbox hide-when-print"><%= check_box_tag("ids[]", entity.id, false, id: nil) %></td>
               <%= raw query.inline_columns.map {|column| "<td class=\"#{column.css_classes}\">#{render_custom_table_content(column, entity)}</td>"}.join %>
               <td class="buttons">
-                <% if entity.editable?(User.current) %>
                     <%= link_to l(:button_show), custom_entity_path(entity), title: l(:button_show), class: 'icon-only icon-magnifier' %>
                     <%= link_to l(:button_edit), edit_custom_entity_path(entity, edit_query: true, back_url: back_url), remote: true, title: l(:button_edit), class: 'icon-only icon-edit' %>
                     <%= link_to l(:button_delete), custom_entity_path(entity, custom_table_id: @custom_table, project_id: params[:project_id], back_url: back_url), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
-                <% end %>
               </td>
             </tr>
         <% end %>

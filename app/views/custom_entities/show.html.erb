@@ -1,9 +1,14 @@
-<%= render_custom_table_tabs custom_table_tabs(@project.id), @tab %>
-
 <div class="contextual">
   <%= call_hook(:view_custom_table_table_field_action_menu) %>
+  <%= link_to l(:button_edit), edit_custom_entity_path(@custom_entity, back_url: custom_entity_path(@custom_entity)), remote: true, class: 'icon icon-edit' %>
+  <%= link_to l(:button_new_comment), new_note_custom_entity_path(@custom_entity), remote: true, class: 'icon icon-issue-edit' %>
+  <%= link_to l(:button_delete), custom_entity_path(@custom_entity, custom_table_id: @custom_entity.custom_table), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon icon-del' %>
 </div>
-<h2><%= @custom_entity.name.singularize %></h2>
+
+<%= title [l(:label_custom_tables), custom_tables_path],
+          [@custom_entity.custom_table.name, custom_table_path(@custom_entity.custom_table)],
+          @custom_entity.name %>
+
 <div class="issue details">
 
   <p class="author">
@@ -20,12 +25,8 @@
   <% @queries_scope.each do |query| %>
           <hr />
           <div class="contextual">
-            <%# TODO finish it %>
-            <%#= link_to l(:label_add), add_belongs_to_custom_entity_path(@custom_entity, back_url: custom_entity_path(@custom_entity), custom_field_id: query[:selected_custom_values].keys.first),remote: true, class: 'icon icon-add'%>
-
             <%= link_to l(:label_new), new_custom_entity_path(
                 custom_table_id: query[:custom_table_id],
-                project_id: @project.identifier,
                 back_url: custom_entity_path(@custom_entity),
                 custom_entity: {custom_field_values: query[:selected_custom_values]}), remote: true, class: 'icon icon-add' %>
             <%= call_hook(:view_custom_table_sub_table_action_menu) %>
@@ -46,10 +47,7 @@
       </div>
   <% end %>
 
-<% content_for :sidebar do %>
-    <%= render partial: 'custom_tables/sidebar' %>
-<% end %>
-
 <% other_formats_links do |f| %>
-    <%= f.link_to 'PDF', :url => params %>
+    <%= f.link_to 'PDF', :url => params.permit! %>
 <% end %>
+<%= wikitoolbar_for "" %>

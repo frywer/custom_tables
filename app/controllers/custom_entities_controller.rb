@@ -1,5 +1,6 @@
 class CustomEntitiesController < ApplicationController
-  unloadable
+  layout 'admin'
+  self.main_menu = false
 
   helper :issues
   include TimelogHelper
@@ -15,12 +16,10 @@ class CustomEntitiesController < ApplicationController
 
   accept_api_auth :show
 
-  before_filter :authorize_global
-  before_filter :find_custom_entity, only: [:show, :edit, :update, :add_belongs_to, :new_note]
-  before_filter :find_custom_entities, only: [:context_menu, :bulk_edit, :bulk_update, :destroy, :context_export]
-  before_filter :find_project_by_project_id, only: [:new, :show, :edit, :update]
-  before_filter :find_journals, only: :show
-
+  before_action :authorize_global
+  before_action :find_custom_entity, only: [:show, :edit, :update, :add_belongs_to, :new_note]
+  before_action :find_custom_entities, only: [:context_menu, :bulk_edit, :bulk_update, :destroy, :context_export]
+  before_action :find_journals, only: :show
 
   def index
 
@@ -31,8 +30,6 @@ class CustomEntitiesController < ApplicationController
   end
 
   def show
-    @attrs_names = @custom_entity.custom_values.map {|v| {name: v.custom_field.name.downcase.gsub(/[^0-9A-Za-z]/, '_'), value: v.value}}
-    @tab = @custom_entity.custom_table.name
     @queries_scope = []
     retrieve_sub_tables_query
 
@@ -45,15 +42,9 @@ class CustomEntitiesController < ApplicationController
   end
 
   def new
-    custom_table = CustomTable.find_by(id: params[:custom_table_id])
-    if (class_name = custom_table.class.name) == 'CustomTable'
-      @custom_entity = CustomEntity.new
-    else
-      @custom_entity = "CustomEntities::#{class_name.split('::').last}".constantize.new
-    end
+    @custom_entity = CustomEntity.new
     @custom_entity.custom_table_id = params[:custom_table_id]
     @custom_entity.custom_field_values = params[:custom_entity][:custom_field_values] if params[:custom_entity]
-    @tab = @custom_entity.custom_table.name
 
     respond_to do |format|
       format.js
@@ -74,13 +65,14 @@ class CustomEntitiesController < ApplicationController
     @custom_entity.safe_attributes = params[:custom_entity]
 
     if params[:parent_entities_cf_ids].present?
-      @custom_entity.parent_entity_ids = params[:custom_entity][:custom_field_values].select {|k, _v| params[:parent_entities_cf_ids].include?(k)}.values
+      @custom_entity.parent_entity_ids = params[:custom_entity][:custom_field_values]
+                                             .select {|k, _v| params[:parent_entities_cf_ids].include?(k)}.values
     end
 
     if @custom_entity.save
       flash[:notice] = l(:notice_successful_create)
       respond_to do |format|
-        format.html { redirect_back_or_default custom_entity_path(@custom_entity) }
+        format.html { redirect_back_or_default custom_table_path(@custom_entity.custom_table) }
         format.js
         format.api  { render action: 'show', status: :created, location: custom_entity_url(@custom_entity) }
       end
@@ -105,13 +97,14 @@ class CustomEntitiesController < ApplicationController
     @custom_entity.init_journal(User.current)
     @custom_entity.safe_attributes = params[:custom_entity]
     if params[:parent_entities_cf_ids].present?
-      @custom_entity.parent_entity_ids = params[:custom_entity][:custom_field_values].select {|k, v| params[:parent_entities_cf_ids].include?(k)}.values
+      @custom_entity.parent_entity_ids = params[:custom_entity][:custom_field_values]
+                                             .select {|k, _v| params[:parent_entities_cf_ids].include?(k)}.values
     end
 
     if @custom_entity.save
       flash[:notice] = l(:notice_successful_update)
       respond_to do |format|
-        format.html { redirect_back_or_default custom_entity_path(@custom_entity) }
+        format.html { redirect_back_or_default custom_table_path(@custom_entity.custom_table) }
         format.js
         format.api  { render action: 'show', status: :created, location: custom_entity_url(@custom_entity) }
       end
@@ -131,7 +124,7 @@ class CustomEntitiesController < ApplicationController
     respond_to do |format|
       format.html {
         flash[:notice] = l(:notice_successful_delete)
-        redirect_back_or_default project_custom_table_path(custom_table, project_id: custom_table.project.identifier)
+        redirect_back_or_default custom_table_path(custom_table)
       }
       format.api { render_api_ok }
     end
@@ -238,10 +231,6 @@ class CustomEntitiesController < ApplicationController
 
   def find_custom_entities
     @custom_entities = CustomEntity.where(id: (params[:id] || params[:ids]))
-  end
-
-  def find_project_by_project_id
-    @project = @custom_entity.try(:project) || super
   end
 
 end

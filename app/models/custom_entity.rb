@@ -1,13 +1,10 @@
 class CustomEntity < ActiveRecord::Base
-  unloadable
   include Redmine::SafeAttributes
   include CustomTables::ActsAsJournalize
 
   belongs_to :custom_table
   belongs_to :author, class_name: 'User', foreign_key: 'author_id'
   has_one :project, through: :custom_table
-  #has_many :custom_fields, through: :custom_table
-  #has_many :custom_values, class_name: 'CustomValue', foreign_key: 'customized_id'
 
   has_and_belongs_to_many :parent_entities,
                           class_name: "CustomEntity",
@@ -23,11 +20,10 @@ class CustomEntity < ActiveRecord::Base
 
   safe_attributes 'custom_table_id', 'author_id', 'custom_field_values', 'custom_fields', 'parent_entity_ids', 'sub_entity_ids'
 
-  attr_protected :id
   after_destroy :destroy_values
   acts_as_customizable
 
-  delegate :name, :project, to: :custom_table
+  delegate :name, to: :custom_table
 
   acts_as_watchable
 
@@ -37,7 +33,8 @@ class CustomEntity < ActiveRecord::Base
     if new_record?
       custom_table.name
     else
-      custom_table.main_custom_field.custom_values.detect { |i| i.customized_id == id }.value || '---'
+      custom_value = custom_values.detect { |cv| cv.custom_field == custom_table.main_custom_field }
+      custom_value.try(:value) || '---'
     end
   end
 
@@ -45,50 +42,38 @@ class CustomEntity < ActiveRecord::Base
     custom_table.custom_fields
   end
 
-  # TODO fix it
-  def visible?(user = nil)
-    true
+  def project
+    nil
   end
 
-  # TODO fix it
-  def editable?(user = User.current)
-    true
-  end
-
-  # TODO fix it
-  def deletable?(user = nil)
-    true
-  end
-
-  def leaf?
-    false
-  end
-
-  def is_descendant_of?(p)
-    false
-  end
+  # # TODO fix it
+  # def visible?(user = nil)
+  #   true
+  # end
+  #
+  # # TODO fix it
+  # def editable?(user = User.current)
+  #   true
+  # end
+  #
+  # # TODO fix it
+  # def deletable?(user = nil)
+  #   true
+  # end
+  #
+  # def leaf?
+  #   false
+  # end
+  #
+  # def is_descendant_of?(p)
+  #   false
+  # end
 
   def main_custom_field
     custom_table.main_custom_field
   end
 
   def each_notification(users, &block)
-    # if users.any?
-    #   if custom_field_values.detect {|value| !value.custom_field.visible?}
-    #     users_by_custom_field_visibility = users.group_by do |user|
-    #       visible_custom_field_values.map(&:custom_field_id).sort
-    #     end
-    #     users_by_custom_field_visibility.values.each do |users|
-    #       yield(users)
-    #     end
-    #   else
-    #     yield(users)
-    #   end
-    # end
-  end
-
-  def notes_addable?(user=User.current)
-    true
   end
 
   def attachments

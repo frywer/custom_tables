@@ -22,7 +22,7 @@ en:
   label_bulk_edit_selected: Bulk edit selected %{table_name}
   label_new_column: New column
   label_all_tables: All tables
-  help_please_configure_table_first: Rows are missing in this table, please configure first %{settings}
+  help_please_configure_table_first: There is no custom fields on this table. %{settings}
   label_add: Add
   button_new_comment: New comment
   label_new_note: New comment

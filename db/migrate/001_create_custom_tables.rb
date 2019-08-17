@@ -1,4 +1,4 @@
-class CreateCustomTables < ActiveRecord::Migration
+class CreateCustomTables < ActiveRecord::Migration[4.2]
   def change
     create_table :custom_tables do |t|
       t.string :name

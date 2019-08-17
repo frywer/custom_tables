@@ -3,11 +3,10 @@ module CustomTables
     module CustomValuePatch
       def self.included(base)
         base.class_eval do
-          unloadable # Send unloadable so it will not be unloaded in development
 
           belongs_to :custom_entity
 
-          after_update :ensure_belongs_to_values, if: -> {main_column? && customized.sub_entities.any?}
+          after_update :ensure_belongs_to_values, if: -> { main_column? && customized.sub_entities.any? }
 
           def main_column?
             custom_field_id == custom_field.custom_table.main_custom_field.id

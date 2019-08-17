@@ -4,7 +4,6 @@ class CustomEntityQuery < Query
   self.view_permission = :show_tables
 
   self.available_columns = [
-    QueryColumn.new(:id, sortable: "#{CustomEntity.table_name}.id", caption: l(:label_id)),
     QueryColumn.new(:created_at, sortable: "#{CustomEntity.table_name}.created_at", caption: l(:field_created_on), groupable: true),
     QueryColumn.new(:updated_at, sortable: "#{CustomEntity.table_name}.updated_at", caption: l(:field_updated_on), groupable: true),
     QueryColumn.new(:author, sortable: lambda {User.fields_for_order_statement("authors")}, groupable: true)
@@ -25,7 +24,6 @@ class CustomEntityQuery < Query
   end
 
   def initialize_available_filters
-    add_available_filter "id", type: :integer, label: :label_id
     add_available_filter "created_at", type: :date, label: :field_created_on
     add_available_filter "updated_at", type: :date, label: :field_updated_on
     add_available_filter "author_id", type: :list, values: lambda { author_values }
@@ -37,7 +35,6 @@ class CustomEntityQuery < Query
 
   def base_scope
     CustomEntity
-      .joins(:project)
       .where(statement)
   end
 
@@ -79,22 +76,9 @@ class CustomEntityQuery < Query
           .order(order_option)
           .joins(joins_for_order_statement(order_option.join(',')))
       else
-        base_scope
-          .where(custom_table_id: self.class.custom_table_id)
-          .limit(options[:limit])
-          .order(order_option)
-          .joins(joins_for_order_statement(order_option.join(',')))
+        base_scope.where(custom_table_id: self.class.custom_table_id).limit(options[:limit]).order(order_option).joins(joins_for_order_statement(order_option.join(',')))
       end
     end
-  end
-
-  def editable_by?(user)
-    return false unless user
-    # Admin can edit them all and regular users can edit their private queries
-    # return true if user.admin? || (is_private? && self.user_id == user.id)
-    # # Members can not edit public queries that are for all project (only admin is allowed to)
-    # is_public? && !@is_for_all && user.allowed_to?(:manage_public_queries, project)
-    true
   end
 
 end

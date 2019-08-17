@@ -2,11 +2,12 @@ class CustomTable < ActiveRecord::Base
   unloadable
   include Redmine::SafeAttributes
 
-  belongs_to :project
+  # belongs_to :project
   belongs_to :author, class_name: 'User', foreign_key: 'author_id'
   has_many :custom_fields, dependent: :destroy
   has_many :custom_entities, dependent: :destroy
   has_one :custom_entity
+  has_and_belongs_to_many :projects
 
   acts_as_nested_set
 
@@ -21,9 +22,7 @@ class CustomTable < ActiveRecord::Base
     end
   }
 
-  safe_attributes 'name', 'project_id', 'author_id', 'main_custom_field_id'
-
-  attr_protected :id
+  safe_attributes 'name', 'author_id', 'main_custom_field_id', 'project_ids', 'is_for_all'
 
   validates :name, presence: true, uniqueness: true
 

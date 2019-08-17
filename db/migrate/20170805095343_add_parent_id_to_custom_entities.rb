@@ -1,4 +1,4 @@
-class AddParentIdToCustomEntities < ActiveRecord::Migration
+class AddParentIdToCustomEntities < ActiveRecord::Migration[4.2]
   def change
     create_table :related_custom_entities, id: false do |t|
       t.integer :parent_entity_id
@@ -10,6 +10,5 @@ class AddParentIdToCustomEntities < ActiveRecord::Migration
 
     add_column :custom_tables, :settings, :text, null: true, length: 50.megabytes
     add_reference :custom_fields, :parent_table, default: nil, index: true, null: true
-    #add_reference :custom_values, :custom_entity, default: nil, index: true, null: true
   end
 end

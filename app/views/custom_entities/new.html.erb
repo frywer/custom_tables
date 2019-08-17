@@ -1,16 +1,7 @@
-<% unless request.format.js? %>
-    <%= render_custom_table_tabs custom_table_tabs(@custom_entity.custom_table.project.id), @tab || params[:tab] %>
-<% end %>
-
 <% custom_table_id = params[:custom_table_id] || @custom_entity.custom_table_id %>
 <%= labelled_form_for :custom_entity, @custom_entity, html: {id: 'new_custom_entity_form'} do |f|  %>
     <%= render partial: 'form', locals: {f: f} %>
     <%#= hidden_field_tag :back_url, custom_table_path(custom_table_id) %>
-    <%= hidden_field_tag :project_id, params[:project_id] %>
     <%= f.hidden_field :custom_table_id, value: custom_table_id %>
     <%= submit_tag l(:button_save) %>
-<% end %>
-
-<% content_for :sidebar do %>
-    <%= render partial: 'custom_tables/sidebar' %>
 <% end %>

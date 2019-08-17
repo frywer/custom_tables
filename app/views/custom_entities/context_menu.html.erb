@@ -2,7 +2,7 @@
 <ul>
   <% if @custom_entity %>
       <li><%= context_menu_link l(:button_show), custom_entity_path(@custom_entity), class: 'icon-show' %></li>
-      <li><%= context_menu_link l(:button_edit), edit_custom_entity_path(@custom_entity, edit_query: true, back_url: params[:back_url]), remote: true, class: 'icon-edit', disabled: !@can[:edit] %></li>
+      <li><%= context_menu_link l(:button_edit), edit_custom_entity_path(@custom_entity, edit_query: true, back_url: params[:back_url]), remote: true, class: 'icon icon-edit', disabled: !@can[:edit] %></li>
   <% else %>
       <li><%= context_menu_link l(:button_edit), bulk_edit_custom_entities_path(ids: @custom_entity_ids, back_url: @back), remote: true, class: 'icon icon-edit' %></li>
   <% end %>

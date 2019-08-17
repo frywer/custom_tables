@@ -1,28 +1,31 @@
 class CustomEntityCustomField < CustomField
 
-  has_many :custom_entities, through: :custom_table, source: :custom_entity
-
+  clear_validators!
+  validates_presence_of :name, :field_format
+  validates_uniqueness_of :name, scope: :custom_table_id
+  validates_length_of :name, maximum: 30
+  validates_length_of :regexp, maximum: 255
+  validates_inclusion_of :field_format, in: Proc.new {Redmine::FieldFormat.available_formats}
+  validate :validate_custom_field
   validates :custom_table_id, presence: true
 
-  before_destroy :clean_values!
+  has_many :custom_entities, through: :custom_table, source: :custom_entity
+
+  belongs_to :custom_table
+  belongs_to :parent_table, class_name: 'CustomTable'
+
+  before_create :ensure_position
+
+  safe_attributes 'external_name', 'custom_table_id'
 
   def belongs_to_format?
     field_format == 'belongs_to'
   end
 
-  def clean_values!
-    if belongs_to_format?
-      sub_entities = CustomEntity.where(id: custom_values.map(&:customized_id))
-      customized_entities = CustomEntity.where(id: custom_values.map(&:value))
-      customized_entities.each do |entity|
-        couples = entity.sub_entities & sub_entities
-        entity.sub_entities.delete(couples) if couples.any?
-      end
-    end
-    custom_values.destroy_all
+  private
+
+  def ensure_position
+    self.position = custom_table.custom_fields.count.next
   end
 
-  def external_name
-    super || name.downcase.singularize.gsub(/[^0-9A-Za-z]/, '_')
-  end
 end

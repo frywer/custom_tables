@@ -1,12 +1,4 @@
 module CustomTablesHelper
-  def custom_table_tabs(project_id = nil)
-    tabs = []
-    tabs << { name: 'index', show: 'custom_tables/custom_index', index: 'custom_tables/custom_index', label: 'index', table_id: nil, project_id: project_id, path: project_custom_tables_path(project_id: @project.try(:identifier) || params[:project_id]) }
-    CustomTable.where(project_id: project_id).sorted.each do |table|
-      tabs << { name: table.name, show: 'custom_tables/custom_table_tab', edit: 'custom_tables/edit', label: l(:label_custom_table_tab, name: table.name), table_id: table, project_id: @project.try(:identifier) || project_id }
-    end
-    tabs
-  end
 
   def render_setting_tabs(tabs, selected=params[:tab], locals = {})
     if tabs.any?
@@ -17,18 +9,6 @@ module CustomTablesHelper
       render :partial => 'common/tabs', :locals => {:tabs => tabs, :selected_tab => selected}.merge(locals)
     else
       content_tag 'p', l(:label_no_data), :class => "nodata"
-    end
-  end
-
-  def render_custom_table_tabs(tabs, selected = params[:tab], entity = nil)
-    if tabs.any?
-      unless tabs.detect {|tab| tab[:name] == selected}
-        selected = nil
-      end
-      selected ||= tabs.first[:name]
-      render partial: 'custom_tables/tabs', locals: {tabs: tabs, selected_tab: selected}
-    else
-      content_tag 'p', l(:label_no_data), class: "nodata"
     end
   end
 

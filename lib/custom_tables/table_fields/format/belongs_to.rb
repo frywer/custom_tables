@@ -3,7 +3,7 @@ module CustomTables
     module Format
 
       class BelongsTo < Redmine::FieldFormat::List
-        add 'belongs_to'
+        #add 'belongs_to'
         self.form_partial = 'custom_fields/formats/belongs_to'
 
         def possible_values_options(custom_field, object=nil)

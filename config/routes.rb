@@ -1,16 +1,14 @@
 # Plugin's routes
 # See: http://guides.rubyonrails.org/routing.html
 
-resources :projects do
-  resources :custom_tables
-end
+resources :custom_tables
 
 resources :custom_tables do
   collection do
     get :context_menu
   end
 end
-resources :table_fields#, only: [:edit, :create, :update, :delete]
+resources :table_fields
 resources :custom_entity_queries, only: [:new, :create]
 resources :custom_entities do
   collection do

@@ -1,5 +1,6 @@
 class CustomTablesController < ApplicationController
-  unloadable
+  layout 'admin'
+  self.main_menu = false
 
   helper :sort
   include SortHelper
@@ -15,21 +16,30 @@ class CustomTablesController < ApplicationController
   helper :custom_tables_pdf
   include SettingsHelper
 
-  accept_api_auth :show, :index
-
   before_action :find_custom_table, only: [:edit, :update, :show, :destroy, :setting_tabs]
-  before_action :find_project_by_project_id, only: [:index, :new, :create, :destroy, :show, :edit, :update]
   before_action :authorize_global
   before_action :find_custom_tables, only: [:context_menu]
   before_action :setting_tabs, only: :edit
   before_action :export_custom_entities, only: :show
 
+  accept_api_auth :show, :index, :create, :update, :destroy
+
   def index
     retrieve_query(CustomTableQuery, false)
 
-    scope = CustomTable.where(project_id: @project.id)
+    case params[:format]
+    when 'xml', 'json'
+      @offset, @limit = api_offset_and_limit
+    else
+      @limit = per_page_option
+    end
+
+    scope = CustomTable
     scope = scope.like(params[:name_like]) if params[:name_like].present?
     @custom_tables = scope.order(@query.sort_clause)
+    @custom_tables_count = scope.count
+    @custom_tables_pages = Paginator.new @custom_tables_count, @limit, params['page']
+    @offset ||= @custom_tables_pages.offset
 
     respond_to do |format|
       format.html
@@ -38,20 +48,17 @@ class CustomTablesController < ApplicationController
   end
 
   def show
-    unless api_request?
-      params[:sort] ||= 'created_at:desc'
-      params[:t] ||= @custom_table.custom_fields.select(&:totalable?).map {|i| "cf_#{i.id}"}
-      params[:c] ||= @custom_table.custom_fields.order(:position).map {|i| "cf_#{i.id}"}
-      @query ||= CustomEntityQuery.build_from_params(params.merge(custom_table_id: params[:id]))
-      sort_init @query.sort_criteria.presence || [['spent_on', 'desc']]
-      sort_update(@query.sortable_columns)
-      @tab = @custom_table.name
-      scope = @query.results_scope(order: sort_clause, pattern: params[:name_like])
+    @query = CustomEntityQuery.build_from_params(params.merge(custom_table_id: params[:id]))
+    @query.column_names ||= @custom_table.custom_fields.order(:position).map {|i| "cf_#{i.id}"}
+    @query.totalable_names ||= @custom_table.custom_fields.select(&:totalable?).map {|i| "cf_#{i.id}"}
+    @query.sort_criteria ||= 'created_at:desc'
+    sort_init @query.sort_criteria.presence || [['spent_on', 'desc']]
+    sort_update(@query.sortable_columns)
+    scope = @query.results_scope(order: sort_clause, pattern: params[:name_like])
 
-      @entity_count = scope.count
-      @entity_pages = Paginator.new @entity_count, per_page_option, params['page']
-      @custom_entities ||= scope.offset(@entity_pages.offset).limit(@entity_pages.per_page).to_a
-    end
+    @entity_count = scope.count
+    @entity_pages = Paginator.new @entity_count, per_page_option, params['page']
+    @custom_entities ||= scope.offset(@entity_pages.offset).limit(@entity_pages.per_page).to_a
 
     respond_to do |format|
       format.html {}
@@ -76,7 +83,7 @@ class CustomTablesController < ApplicationController
   end
 
   def create
-    @custom_table = CustomTable.new(project: @project, author: User.current)
+    @custom_table = CustomTable.new(author: User.current)
     @custom_table.safe_attributes = params[:custom_table]
     if @custom_table.save
       flash[:notice] = l(:notice_successful_create)
@@ -125,7 +132,7 @@ class CustomTablesController < ApplicationController
     @custom_table.destroy
     flash[:notice] = l(:notice_successful_delete)
     respond_to do |format|
-      format.html { redirect_back_or_default project_custom_tables_path(project_id: @project) }
+      format.html { redirect_back_or_default custom_tables_path }
       format.js
       format.api { render_api_ok }
     end
@@ -144,7 +151,7 @@ class CustomTablesController < ApplicationController
 
     @safe_attributes = @custom_tables.map(&:safe_attribute_names).reduce(:&)
 
-    render :layout => false
+    render layout: false
   end
 
   def setting_tabs
@@ -156,10 +163,6 @@ class CustomTablesController < ApplicationController
 
   private
 
-  def find_project_by_project_id
-    @project = @custom_table.try(:project) || super
-  end
-
   def find_custom_table
     @custom_table = CustomTable.find(params[:id])
   rescue ActiveRecord::RecordNotFound
@@ -170,17 +173,8 @@ class CustomTablesController < ApplicationController
     @custom_tables = CustomTable.where(id: (params[:id] || params[:ids]))
   end
 
-  def authorize_global
-    allowed = User.current.allowed_to?({controller: params[:controller], action: params[:action]}, @project)
-    if allowed
-      true
-    else
-      deny_access
-    end
-  end
-
   def export_custom_entities
-    @custom_entities = CustomEntity.find(params[:ids]) if params[:ids]
+    @custom_entities = CustomEntity.find_by(id: params[:ids])
   end
 
 end

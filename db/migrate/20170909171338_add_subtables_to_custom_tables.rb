@@ -1,4 +1,4 @@
-class AddSubtablesToCustomTables < ActiveRecord::Migration
+class AddSubtablesToCustomTables < ActiveRecord::Migration[4.2]
   def change
     add_column :custom_tables, :parent_id, :integer, null: true, :index => true
     add_column :custom_tables, :lft, :integer, null: false, :index => true
