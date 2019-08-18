@@ -1,8 +1,0 @@
-<h2><%= l(:label_query_new) %></h2>
-
-<%= form_tag(@project ? project_queries_path(@project) : queries_path, :id => "query-form") do %>
-    <%= hidden_field_tag 'type', @query.class.name %>
-    <%= hidden_field_tag 'custom_table_id', params[:custom_table_id] %>
-    <%= render :partial => 'form', :locals => {:query => @query} %>
-    <%= submit_tag l(:button_save) %>
-<% end %>

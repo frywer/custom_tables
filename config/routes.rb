@@ -9,7 +9,6 @@ resources :custom_tables do
   end
 end
 resources :table_fields
-resources :custom_entity_queries, only: [:new, :create]
 resources :custom_entities do
   collection do
     get :bulk_edit

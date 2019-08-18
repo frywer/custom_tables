@@ -34,36 +34,8 @@ class CustomTable < ActiveRecord::Base
     s
   end
 
-  def self.visible?
-    User.current.admin?
-  end
-
-  def visible?
-    self.class.visible?
-  end
-
-  def self.editable?
-    User.current.admin?
-  end
-
-  def editable?
-    self.class.editable?
-  end
-
-  def self.deletable?
-    User.current.admin?
-  end
-
-  def deletable?
-    self.class.deletable?
-  end
-
   def main_custom_field
-    if main_custom_field_id.present? && (custom_field = CustomField.find_by(id: main_custom_field_id))
-      custom_field
-    else
-      custom_fields.first
-    end
+    CustomField.find_by(id: main_custom_field_id) || custom_fields.first
   end
 
   def query(totalable_all: false)
@@ -75,4 +47,5 @@ class CustomTable < ActiveRecord::Base
     end
     query
   end
+
 end

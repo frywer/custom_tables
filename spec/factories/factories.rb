@@ -43,9 +43,7 @@ FactoryBot.define do
     editable { true }
     visible { true }
     multiple { false }
-    #format_store {"url_pattern" => ""}
     description { '' }
-    # association :custom_table, factory: :custom_table
     parent_table_id { nil }
   end
 
@@ -78,5 +76,29 @@ FactoryBot.define do
     association :custom_table, factory: :custom_table
     type { 'CustomEntityQuery' }
     visibility { 2 }
+  end
+
+  factory :issue_status, :class => 'IssueStatus' do
+    sequence(:name){ |n| "TestStatus-#{n}"  }
+    default_done_ratio { 100 }
+
+    trait :closed do
+      is_closed { true }
+    end
+  end
+
+  factory :tracker do
+    sequence(:name) {|n| "Tracker ##{n}"}
+    default_status { IssueStatus.first || FactoryBot.create(:issue_status) }
+  end
+
+  factory :issue do
+    sequence(:subject) { |n| "Test issue ##{n}" }
+    association :project, factory: :project
+    tracker { project.trackers.first }
+    start_date { Date.today }
+    due_date { Date.today + 7.days }
+    association :status, factory: :issue_status
+    association :author, :factory => :user, :firstname => "Author"
   end
 end

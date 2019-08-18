@@ -4,9 +4,7 @@ class CustomTablesController < ApplicationController
 
   helper :sort
   include SortHelper
-  # include TimelogHelper
   helper :custom_fields
-  # include CustomFieldsHelper
   helper :queries
   include QueriesHelper
   helper :issues
@@ -14,7 +12,6 @@ class CustomTablesController < ApplicationController
   helper :custom_entities
   helper :settings
   helper :custom_tables_pdf
-  # include SettingsHelper
 
   before_action :find_custom_table, only: [:edit, :update, :show, :destroy, :setting_tabs]
   before_action :authorize_global

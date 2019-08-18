@@ -3,6 +3,8 @@ Redmine Custom Tables
 
 This plugin provides a possibility to create custom tables. The table is build with Redmine custom fields. It allows you to create any databases you need for your business and integrate it into your workflow processes.
 
+<img src="custom_tables.jpg" width="600"/>
+
 Features
 -------------
 * Table constructor
@@ -33,3 +35,10 @@ $ git clone https://github.com/frywer/custom_tables.git
 $ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 ```
 * Restart redmine
+
+Usage
+----------------------
+1) Visit **Administration->Custom tables** to open table constructor. 
+2) Press button **New table**. Fill the name field, select projects you want to enable table on and submit the form.
+3) Add custom fields to your new table.
+4) Give the access to the users **Administration -> Roles and permissions -> Project -> Manage custom tables**

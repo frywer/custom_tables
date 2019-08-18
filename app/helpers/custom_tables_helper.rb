@@ -65,12 +65,4 @@ module CustomTablesHelper
     end
   end
 
-  def render_sidebar_table_queries(table)
-    queries = CustomEntityQuery.where(custom_table_id: table.id)
-
-    out = ''.html_safe
-    out << query_links(l(:label_my_queries), queries.select(&:is_private?))
-    out << query_links(l(:label_query_plural), queries.reject(&:is_private?))
-    out
-  end
 end
