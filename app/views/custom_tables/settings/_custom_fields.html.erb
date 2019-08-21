@@ -1,0 +1,10 @@
+<%= labelled_form_for :custom_table, @custom_table, url: custom_table_path(project_id: @project, back_url: edit_custom_table_path(@custom_table, tab: 'custom_fields')), html: {multipart: true, id: 'custom_table_form'} do |f|  %>
+  <% tab = {name: 'CustomEntityCustomField', partial: 'table_fields/index', label: :label_spent_time} %>
+
+  <%= content_tag('div', render(partial: 'table_fields/index', locals: {tab: tab, f: f})) %>
+
+  <%= javascript_tag do %>
+    $(function() { $("table.custom_fields tbody").positionedItems(); });
+  <% end %>
+  <%= submit_tag l(:button_update) %>
+<% end %>

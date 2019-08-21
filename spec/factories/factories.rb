@@ -98,7 +98,53 @@ FactoryBot.define do
     tracker { project.trackers.first }
     start_date { Date.today }
     due_date { Date.today + 7.days }
+    priority { IssuePriority.default || FactoryBot.create(:issue_priority, :default) }
     association :status, factory: :issue_status
     association :author, :factory => :user, :firstname => "Author"
+  end
+
+  factory :enumeration do
+    name { 'Test' }
+
+    trait :default do
+      name { 'Default' }
+      is_default { true }
+    end
+  end
+
+  factory :role do
+    sequence(:name){ |n| "Role ##{n}" }
+    permissions { Role.new.setable_permissions.collect(&:name).uniq }
+  end
+
+  factory :issue_priority, parent: :enumeration, class: 'IssuePriority' do
+    sequence(:name){ |n| "Priority ##{n}" }
+  end
+
+  factory :member_role do
+    role
+    member
+  end
+
+  factory :member do
+    project
+    user
+    roles { [] }
+
+    after :build do |member, evaluator|
+      if evaluator.roles.empty?
+        member.member_roles << FactoryBot.build(:member_role, member: member)
+      else
+        evaluator.roles.each do |role|
+          member.member_roles << FactoryBot.build(:member_role, member: member, role: role)
+        end
+      end
+    end
+
+    trait :without_roles do
+      after :create do |member, evaluator|
+        member.member_roles.clear
+      end
+    end
   end
 end

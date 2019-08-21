@@ -1,11 +1,4 @@
 <%= labelled_form_for :custom_table, @custom_table, url: custom_table_path(project_id: @project), html: {multipart: true, id: 'custom_table_form'} do |f|  %>
     <%= render partial: 'form', locals: {f: f} %>
-    <% tab = {name: 'CustomEntityCustomField', partial: 'table_fields/index', label: :label_spent_time} %>
-
-    <%= content_tag('div', render(partial: 'table_fields/index', locals: {tab: tab, f: f})) %>
-
-    <%= javascript_tag do %>
-        $(function() { $("table.custom_fields tbody").positionedItems(); });
-    <% end %>
     <%= submit_tag l(:button_update) %>
 <% end %>

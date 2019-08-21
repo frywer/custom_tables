@@ -6,6 +6,8 @@ class CustomTable < ActiveRecord::Base
   has_many :custom_entities, dependent: :destroy
   has_one :custom_entity
   has_and_belongs_to_many :projects
+  has_and_belongs_to_many :trackers
+  has_and_belongs_to_many :roles
 
   acts_as_nested_set
 
@@ -20,7 +22,22 @@ class CustomTable < ActiveRecord::Base
     end
   }
 
-  safe_attributes 'name', 'author_id', 'main_custom_field_id', 'project_ids', 'is_for_all'
+  scope :visible, lambda {|*args|
+    user = args.shift || User.current
+    if user.admin?
+      # nop
+    elsif user.memberships.any?
+      where("#{table_name}.visible = ? OR #{table_name}.id IN (SELECT DISTINCT cfr.custom_table_id FROM #{Member.table_name} m" +
+                " INNER JOIN #{MemberRole.table_name} mr ON mr.member_id = m.id" +
+                " INNER JOIN #{table_name_prefix}custom_tables_roles#{table_name_suffix} cfr ON cfr.role_id = mr.role_id" +
+                " WHERE m.user_id = ?)",
+            true, user.id)
+    else
+      where(:visible => true)
+    end
+  }
+
+  safe_attributes 'name', 'author_id', 'main_custom_field_id', 'project_ids', 'is_for_all', 'description', 'tracker_ids', 'role_ids', 'visible'
 
   validates :name, presence: true, uniqueness: true
 

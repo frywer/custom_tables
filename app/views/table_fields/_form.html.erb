@@ -82,9 +82,7 @@ when "IssueCustomField" %>
 <% else %>
     <p><%= f.check_box :is_required %></p>
     <p><%= f.check_box :is_filter, { checked: true } %></p>
-      <% if User.current.admin? %>
-          <p><%= f.text_field :external_name %></p>
-      <% end %>
+    <p><%= f.text_field :external_name %></p>
 <% end %>
 <%= call_hook(:"view_custom_fields_form_#{@custom_field.type.to_s.underscore}", :custom_field => @custom_field, :form => f) %>
 </div>

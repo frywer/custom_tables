@@ -152,7 +152,8 @@ class CustomTablesController < ApplicationController
 
   def setting_tabs
     @setting_tabs = [
-      {name: 'general', partial: 'custom_tables/edit', label: :label_general}
+      {name: 'general', partial: 'custom_tables/edit', label: :label_general},
+      {name: 'custom_fields', partial: 'custom_tables/settings/custom_fields', label: :label_custom_field_plural}
     ]
     call_hook(:controller_setting_tabs_after, { setting_tabs: @setting_tabs, custom_table: @custom_table })
   end

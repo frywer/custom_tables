@@ -1,3 +1,8 @@
+<% back_url = edit_custom_table_path(@custom_table, tab: 'custom_fields')%>
+<div class="contextual">
+  <%= link_to l(:label_new_column), new_table_field_path(custom_table_id: @custom_table, back_url: back_url), remote: true, class: 'icon icon-custom-fields' %>
+</div>
+
 <table class="list custom_fields">
   <thead><tr>
     <th><%=l(:field_name)%></th>
@@ -9,14 +14,14 @@
   <tbody>
   <% (@custom_fields_by_type[tab[:name]] || []).sort.each do |custom_field| -%>
     <tr class="<%= cycle("odd", "even") %>">
-      <td class="name"><%= link_to custom_field.name, edit_table_field_path(custom_field, custom_table_id: @custom_table.id), remote: true %></td>
+      <td class="name"><%= link_to custom_field.name, edit_table_field_path(custom_field, custom_table_id: @custom_table.id, back_url: back_url), remote: true %></td>
       <td><%= l(custom_field.format.label) %></td>
       <td><%= checked_image custom_field.is_required? %></td>
       <td><%= f.radio_button :main_custom_field_id, custom_field.id %></td>
       <td class="buttons">
         <%= reorder_handle(custom_field, url: custom_field_path(custom_field), param: 'custom_field') %>
-        <%= link_to l(:button_edit), edit_table_field_path(id: custom_field), remote: true, title: l(:button_edit), class: 'icon-only icon-edit' %>
-        <%= delete_link table_field_path(custom_field, custom_table_id: @custom_table.id), class: 'icon-only icon-del' %>
+        <%= link_to l(:button_edit), edit_table_field_path(id: custom_field, back_url: back_url), remote: true, title: l(:button_edit), class: 'icon-only icon-edit' %>
+        <%= delete_link table_field_path(custom_field, custom_table_id: @custom_table.id, back_url: back_url), class: 'icon-only icon-del' %>
       </td>
     </tr>
   <% end; reset_cycle %>

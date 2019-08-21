@@ -3,7 +3,8 @@ require "spec_helper"
 RSpec.describe "issues/_custom_tables" do
   include_context 'logged as'
 
-  let(:issue) { FactoryBot.create(:issue) }
+  let(:tracker) { FactoryBot.create(:tracker) }
+  let(:issue) { FactoryBot.create(:issue, tracker: tracker) }
   let(:custom_table) { FactoryBot.create(:custom_table) }
 
   before(:each) do
@@ -19,7 +20,6 @@ RSpec.describe "issues/_custom_tables" do
   end
 
   context 'with permission' do
-    let(:issue) { FactoryBot.create(:issue) }
 
     before(:each) do
       allow_any_instance_of(User).

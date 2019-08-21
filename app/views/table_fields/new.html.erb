@@ -1,4 +1,3 @@
-
 <%= labelled_form_for :custom_field, @custom_field, url: table_fields_path, html: {id: 'custom_field_form'} do |f| %>
     <%= render partial: 'form', locals: {f: f} %>
     <%= hidden_field_tag :type, @custom_field.type %>

@@ -8,10 +8,13 @@ module CustomTables
 
           # Returns a scope of all custom tables enabled for project issues
           # (explicitly associated custom tables and custom tables enabled for all projects)
-          def all_issue_custom_tables
-            CustomTable.
+          def all_issue_custom_tables(issue)
+            @custom_tables ||= CustomTable.
+                joins(:trackers).
+                visible.
                 sorted.
-                where("is_for_all = ? OR id IN (?)", true, custom_table_ids)
+                where("custom_tables.is_for_all = ? OR custom_tables.id IN (?)", true, custom_table_ids).
+                where(trackers: {id: issue.tracker})
           end
 
         end

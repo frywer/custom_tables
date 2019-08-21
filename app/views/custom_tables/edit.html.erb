@@ -1,4 +1,4 @@
 <%= title [l(:label_custom_tables), custom_tables_path], [@custom_table.name, custom_table_path(@custom_table)], l(:label_settings) %>
-<%= render_tabs @setting_tabs %>
+<%= render_tabs @setting_tabs, params[:tab] %>
 
 <% html_title(l(:label_settings)) -%>

@@ -1,15 +1,49 @@
 <%= error_messages_for @custom_table %>
+
 <div class="splitcontentleft">
-  <fieldset class="box"><legend><%= l :label_general %></legend>
-    <div class = "tabular" >
-      <p><%= f.text_field :name %></p>
-    </div>
+  <div class="box tabular">
+    <p><%= f.text_field :name, size: 50, required: true %></p>
+    <p><%= f.text_area :description, rows: 7 %></p>
+  </div>
+
+  <fieldset class="box" id="custom_table_tracker_ids"><legend><%= toggle_checkboxes_link("#custom_table_tracker_ids input[type=checkbox]") %><%=l(:label_tracker_plural)%></legend>
+    <% tracker_ids = @custom_table.tracker_ids %>
+    <% Tracker.sorted.each do |tracker| %>
+      <%= check_box_tag "custom_table[tracker_ids][]",
+                        tracker.id,
+                        tracker_ids.include?(tracker.id),
+                        :id => "custom_table_tracker_ids_#{tracker.id}" %>
+      <label class="no-css" for="custom_table_tracker_ids_<%=tracker.id%>">
+        <%= tracker.name %>
+      </label>
+    <% end %>
+    <%= hidden_field_tag "custom_table[tracker_ids][]", '' %>
   </fieldset>
 </div>
 
 <div class="splitcontentright">
+  <fieldset class="box tabular"><legend><%= l(:field_visible) %></legend>
+    <label class="block">
+      <%= radio_button_tag 'custom_table[visible]', 1, @custom_table.visible?, :id => 'custom_table_visible_on',
+                           onclick: "window.ToggleCheckboxes.roles(true)" %>
+      <%= l(:label_visibility_public) %>
+    </label>
+    <label class="block">
+      <%= radio_button_tag 'custom_table[visible]', 0, !@custom_table.visible?, :id => 'custom_table_visible_off', onclick: "window.ToggleCheckboxes.roles(false)" %>
+      <%= l(:label_visibility_roles) %>:
+    </label>
+    <% role_ids = @custom_table.role_ids %>
+    <% Role.givable.sorted.each do |role| %>
+      <label class="block custom_table_role" style="padding-left:2em;">
+        <%= check_box_tag 'custom_table[role_ids][]', role.id, role_ids.include?(role.id), :id => nil, class: 'custom_table_roles_radio', disabled: f.object.visible? %>
+        <%= role.name %>
+      </label>
+    <% end %>
+    <%= hidden_field_tag 'custom_table[role_ids][]', '' %>
+  </fieldset>
+
   <fieldset class="box"><legend><%= toggle_checkboxes_link("#custom_table_project_ids input[type=checkbox]:enabled") %><%= l(:label_project_plural) %></legend>
-    <p><%= f.check_box :is_for_all, onclick: "window.AllProjects.toggle($(this).is(':checked'))"  %></p>
+    <p><%= f.check_box :is_for_all, onclick: "window.ToggleCheckboxes.projects($(this).is(':checked'))"  %></p>
 
     <div id="custom_field_project_ids">
       <% project_ids = @custom_table.project_ids.to_a %>
@@ -22,9 +56,12 @@
 </div>
 
 <script type="text/javascript">
-    window.AllProjects = {
-        toggle: function(checked){
+    window.ToggleCheckboxes = {
+        projects: function(checked){
             $(".custom_table_project_checkbox").prop('disabled', checked);
+        },
+        roles: function(checked){
+            $(".custom_table_roles_radio").prop('disabled', checked);
         },
     }
 </script>
