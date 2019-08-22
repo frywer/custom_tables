@@ -33,7 +33,7 @@ class CustomEntity < ActiveRecord::Base
   end
 
   def visible?(user = User.current)
-    user.allowed_to?(:view_and_manage_entities, nil, true)
+    user.allowed_to?(:view_and_manage_entities, nil, global: true)
   end
 
   def deletable?(user = nil)
