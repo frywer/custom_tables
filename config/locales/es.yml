@@ -1,0 +1,31 @@
+# Spanish strings go here for Rails i18n
+es:
+  # my_label: "My label"
+  label_id: ID
+  label_custom_tables: Tablas personalizadas
+  label_glad_custom_tables: Tablas personalizadas
+  label_custom_table_new: Nueva tabla
+  label_custom_table: Tabla personalizada
+  label_table: Tabla
+  label_custom_table_edit: Editar tabla
+  glad_custom_tables: Tabla personalizada
+  custom_tables: Tabla personalizada
+  label_custom_entity_edit: Editar %{name}
+  label_custom_entity_new: Nueva %{name}
+  label_custom_table_tab: '%{name}'
+  button_edit_custom_table: Editar tabla
+  button_delete_custom_table: Eliminar tabla
+  label_custom_field_edit: Editar campo personalizado
+  field_main_custom_field: Columna principal
+  label_belongs_to: Pertenece a
+  field_parent_table: Tabla
+  label_bulk_edit_selected: Edición masiva seleccionada %{table_name}
+  label_new_column: Nueva columna
+  label_all_tables: Todas las tablas
+  help_please_configure_table_first: No hay campos personalizados en esta tabla. %{settings}
+  label_add: Añadir
+  button_new_comment: Nuevo comentario
+  label_new_note: Nuevo comentario
+  field_external_name: Nombre externo
+  field_export: Exportar
+  text_missing_permission_manage_custom_tables: ¡Sin permiso para administrar tablas personalizadas!
