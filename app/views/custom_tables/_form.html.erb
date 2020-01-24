@@ -1,5 +1,5 @@
 <%= error_messages_for @custom_table %>
-
+<div class="splitcontent">
 <div class="splitcontentleft">
   <div class="box tabular">
     <p><%= f.text_field :name, size: 50, required: true %></p>
@@ -53,6 +53,7 @@
       <%= hidden_field_tag('custom_table[project_ids][]', '', :id => nil) %>
     </div>
   </fieldset>
+</div>
 </div>
 
 <script type="text/javascript">
