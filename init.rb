@@ -3,6 +3,7 @@ Redmine::Plugin.register :custom_tables do
   author 'Ivan Marangoz'
   description 'This is a plugin for Redmine'
   version '1.0.4'
+  requires_redmine :version_or_higher => '4.0.0'
 
   permission :manage_custom_tables, {
       custom_entities: [:new, :edit, :create, :update, :destroy, :context_menu, :bulk_edit, :bulk_update],
