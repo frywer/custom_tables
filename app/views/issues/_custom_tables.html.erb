@@ -1,15 +1,17 @@
-<% if User.current.allowed_to?(:manage_custom_tables, nil, global: true) %>
+<% if User.current.allowed_to?(:manage_custom_tables, nil, global: true) || User.current.allowed_to?(:view_custom_tables, nil, global: true) %>
   <% issue.project.all_issue_custom_tables(issue).each do |custom_table| %>
     <% query = custom_table.query(totalable_all: true) %>
     <% query.add_short_filter('issue_id', "=#{issue.id}") %>
     <% back_url = issue_path(issue) %>
     <hr />
-    <div class="contextual">
-      <%= link_to l(:button_add), new_custom_entity_path(
-          custom_table_id: custom_table.id,
-          back_url: back_url,
-          issue_id: issue.id), remote: true %>
-    </div>
+    <% if User.current.allowed_to?(:manage_custom_tables, nil, global: true) %>
+      <div class="contextual">
+        <%= link_to l(:button_add), new_custom_entity_path(
+            custom_table_id: custom_table.id,
+            back_url: back_url,
+            issue_id: issue.id), remote: true %>
+      </div>
+    <% end %>
     <p><strong><%= custom_table.name %></strong></p>
     <%= render partial: 'query_custom_table', locals: {
         query: query,

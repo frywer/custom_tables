@@ -1,6 +1,7 @@
 require "spec_helper"
 
 describe CustomEntitiesController, logged: true do
+  render_views
 
   let(:custom_table) { FactoryBot.create(:custom_table) }
   let(:custom_fields) { FactoryBot.create_list(:custom_field, 3, custom_table_id: custom_table.id) }
@@ -11,55 +12,68 @@ describe CustomEntitiesController, logged: true do
 
   include_context 'logged as admin'
 
-  it '#show' do
-    custom_value
-    get :show, params: { id: custom_entity }
-    expect(response).to have_http_status(:success)
+  describe '#show' do
+    it 'return success response' do
+      custom_value
+      get :show, params: { id: custom_entity }
+      expect(response).to have_http_status(:success)
+    end
   end
 
-  it '#new' do
-    custom_value
-    get :new, params: { custom_table_id: custom_table.id }
-    expect(response).to have_http_status(:success)
+  describe '#new' do
+    it 'return success response' do
+      custom_value
+      get :new, params: { custom_table_id: custom_table.id }
+      expect(response).to have_http_status(:success)
+    end
   end
 
-  it '#create' do
-    custom_fields
-    cf_values = custom_fields.inject({}) {|k, v| k[v.id.to_s] = "value#{v.name}"; k}
-    expect {
-      post :create, params: { custom_entity: { custom_table_id: custom_table.id, custom_field_values: cf_values } }
-    }.to change { CustomEntity.count }.by(1)
+  describe '#create' do
+    it 'create new entity' do
+      custom_fields
+      cf_values = custom_fields.inject({}) {|k, v| k[v.id.to_s] = "value#{v.name}"; k}
+      expect {
+        post :create, params: { custom_entity: { custom_table_id: custom_table.id, custom_field_values: cf_values } }
+      }.to change { CustomEntity.count }.by(1)
+    end
   end
 
-  it '#edit' do
-    get :edit, params: { id: custom_entity }
-    expect(response).to have_http_status(:success)
+  describe '#edit' do
+    it 'return success response' do
+      get :edit, params: { id: custom_entity }
+      expect(response).to have_http_status(:success)
+    end
   end
 
-  it '#update' do
-    custom_value
-    cf_values = custom_entity.custom_fields.inject({}) {|k, v| k[v.id.to_s] = "new_value"; k}
+  describe '#update' do
+    it 'updates entity' do
+      custom_value
+      cf_values = custom_entity.custom_fields.inject({}) {|k, v| k[v.id.to_s] = "new_value"; k}
 
-    expect {
-      put :update, params: { id: custom_entity, custom_entity: { custom_field_values: cf_values } }
-    }.to change { custom_entity.reload.custom_values.last.value }
+      expect {
+        put :update, params: { id: custom_entity, custom_entity: { custom_field_values: cf_values } }
+      }.to change { custom_entity.reload.custom_values.last.value }
+    end
+
+    it 'update notes' do
+      expect {
+        put :update, params: { id: custom_entity, custom_entity: { notes: 'notes' } }
+      }.to change(Journal, :count)
+    end
   end
 
-  it 'update notes' do
-    expect {
-      put :update, params: { id: custom_entity, custom_entity: { notes: 'notes' } }
-    }.to change(Journal, :count)
+  describe '#delete' do
+    it 'remove entity' do
+      custom_value
+      expect {delete :destroy, params: { id: custom_entity }}.to change(CustomEntity, :count).by(-1)
+    end
   end
 
-  it '#delete' do
-    custom_value
-    expect {delete :destroy, params: { id: custom_entity }}.to change(CustomEntity, :count).by(-1)
+  describe '#bulk_delete' do
+    it 'removes list of intities' do
+      custom_entity
+      custom_entity_2
+      expect {delete :destroy, params: { ids: [custom_entity.id, custom_entity_2.id] }}.to change(CustomEntity, :count).by(-2)
+    end
   end
-
-  it '#bulk_delete' do
-    custom_entity
-    custom_entity_2
-    expect {delete :destroy, params: { ids: [custom_entity.id, custom_entity_2.id] }}.to change(CustomEntity, :count).by(-2)
-  end
-
 end

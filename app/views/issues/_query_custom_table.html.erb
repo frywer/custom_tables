@@ -24,8 +24,10 @@
             <% if User.current.admin? %>
               <%= link_to l(:button_show), custom_entity_path(entity), title: l(:button_show), class: 'icon-only icon-magnifier' %>
             <% end %>
-            <%= link_to l(:button_edit), edit_custom_entity_path(entity, edit_query: true, back_url: back_url), remote: true, title: l(:button_edit), class: 'icon-only icon-edit' %>
-            <%= link_to l(:button_delete), custom_entity_path(entity, custom_table_id: custom_table, back_url: back_url), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
+            <% if User.current.allowed_to?(:manage_custom_tables, nil, global: true) %>
+              <%= link_to l(:button_edit), edit_custom_entity_path(entity, edit_query: true, back_url: back_url), remote: true, title: l(:button_edit), class: 'icon-only icon-edit' %>
+              <%= link_to l(:button_delete), custom_entity_path(entity, custom_table_id: custom_table, back_url: back_url), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
+            <% end %>
           </td>
         </tr>
       <% end %>

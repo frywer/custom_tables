@@ -1,5 +1,9 @@
 FactoryBot.define do
 
+  sequence :name do |n|
+    "Name-##{n}"
+  end
+
   factory :project do
     sequence(:name) { |n| "Project-##{n}" }
     sequence(:identifier) { |n| "project#{n}" }
@@ -10,8 +14,19 @@ FactoryBot.define do
   end
 
   factory :custom_table do
-    sequence(:name) { |n| "Table-##{n}" }
+    transient do
+      # { external_name => field_format }
+      custom_fields { [] }
+    end
+
+    sequence(:name) { |n| "Table-#{n}" }
     association :author, factory: :user
+    # create custom_fields
+    after(:create) do |table, evaluator|
+      evaluator.custom_fields.each do |field|
+        create(:custom_field, custom_table_id: table.id, **field)
+      end
+    end
   end
 
   factory :custom_entity do
@@ -27,24 +42,14 @@ FactoryBot.define do
   end
 
   factory :custom_field do
+    name
     type { 'CustomEntityCustomField' }
-    sequence(:name) { |n| "Name-3213#{n}" }
     field_format { 'string' }
-    possible_values { nil }
-    regexp { '' }
-    min_length { nil }
-    max_length { nil }
-    is_required { false }
-    is_for_all { false }
+    sequence(:position)
     is_filter { true }
-    sequence(:position) { |n| n }
-    searchable { false }
-    default_value { '0' }
     editable { true }
     visible { true }
-    multiple { false }
-    description { '' }
-    parent_table_id { nil }
+    association :custom_table, factory: :custom_table
   end
 
   factory :user_custom_field, parent: :custom_field do
