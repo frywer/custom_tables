@@ -1,22 +1,7 @@
 # run test
-# rspec -Iplugins/custom_tables/spec  plugins/glad_custom_tables/spec
+# rspec -Iplugins/custom_tables/spec  plugins/custom_tables/spec
 
 ENV['RAILS_ENV'] ||= 'test'
-
-#load simplecov
-if ENV['COVERAGE']
-  require 'simplecov'
-  SimpleCov.start 'rails' do
-    coverage_dir 'tmp/coverage'
-###    require "pry"
-
-#exclude core dirs coverage
-    add_filter do |file|
-      file.filename.include?('/lib/plugins/') ||
-          !file.filename.include?('/plugins/')
-    end
-  end
-end
 
 #load rails/redmine
 require File.expand_path('../../../../config/environment', __FILE__)
@@ -27,16 +12,6 @@ require 'rspec/rails'
 require 'rspec/mocks'
 require 'rspec/mocks/standalone'
 require 'factory_bot'
-require 'capybara/rspec'
-
-# use phantom.js as js driver
-require 'capybara/poltergeist'
-
-require 'webmock/rspec'
-WebMock.disable_net_connect!(allow_localhost: true)
-# Dir.glob(File.expand_path('./factories/*.rb', __FILE__)).each do |plugin_factory|
-#   require plugin_factory
-# end
 
 require_relative 'factories/factories'
 require_relative 'support/user'

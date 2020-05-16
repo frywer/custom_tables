@@ -55,7 +55,6 @@ class CustomTablesController < ApplicationController
     @entity_count = scope.count
     @entity_pages = Paginator.new @entity_count, per_page_option, params['page']
     @custom_entities ||= scope.offset(@entity_pages.offset).limit(@entity_pages.per_page).to_a
-
     respond_to do |format|
       format.html {}
       format.api {}

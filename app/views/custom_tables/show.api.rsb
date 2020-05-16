@@ -1,8 +1,0 @@
-api.array :entities do
-  @custom_table.custom_entities.each do |custom_entity|
-    api.entity do
-      render_api_custom_entity custom_entity, api
-    end
-  end
-end
-

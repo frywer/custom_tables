@@ -75,4 +75,24 @@ class CustomEntity < ActiveRecord::Base
     custom_field_values.detect {|v| v.custom_field.external_name == external_name}.try(:value)
   end
 
+  def external_values=(values)
+    custom_field_values.each do |custom_field_value|
+      key = custom_field_value.custom_field.external_name
+      next unless key.present?
+      if values.has_key?(key)
+        custom_field_value.value = values[key]
+      end
+    end
+    @custom_field_values_changed = true
+  end
+
+  def to_h
+    values = {}
+    custom_field_values.each do |value|
+      values[value.custom_field.external_name] = value.value if value.custom_field.external_name.present?
+    end
+    values["id"] = id
+    values
+  end
+
 end
