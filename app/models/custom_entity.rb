@@ -8,7 +8,8 @@ class CustomEntity < ActiveRecord::Base
   has_one :project, through: :issue
   has_many :custom_fields, through: :custom_table
 
-  safe_attributes 'custom_table_id', 'author_id', 'custom_field_values', 'custom_fields', 'parent_entity_ids', 'sub_entity_ids', 'issue_id'
+  safe_attributes 'custom_table_id', 'author_id', 'custom_field_values', 'custom_fields', 'parent_entity_ids',
+                  'sub_entity_ids', 'issue_id', 'external_values'
 
   acts_as_customizable
 

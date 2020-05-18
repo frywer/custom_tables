@@ -20,5 +20,7 @@ module CustomEntitiesHelper
       next unless external_name.present?
       api.__send__(external_name, value)
     end
+    api.issue_id custom_entity.issue_id
+    api.custom_table_id custom_entity.custom_table_id
   end
 end
