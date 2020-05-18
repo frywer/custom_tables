@@ -14,7 +14,7 @@ class CustomEntitiesController < ApplicationController
   include SortHelper
   helper :custom_tables_pdf
 
-  accept_api_auth :show
+  accept_api_auth :show, :create, :update, :destroy
 
   before_action :authorize_global
   before_action :find_custom_entity, only: [:show, :edit, :update, :add_belongs_to, :new_note]
