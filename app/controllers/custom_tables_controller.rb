@@ -53,7 +53,8 @@ class CustomTablesController < ApplicationController
     scope = @query.results_scope(order: sort_clause, pattern: params[:name_like])
 
     @entity_count = scope.count
-    @entity_pages = Paginator.new @entity_count, per_page_option, params['page']
+    per_page = params[:per_page] == 'all' ? nil : per_page_option
+    @entity_pages = Paginator.new @entity_count, per_page, params['page']
     @custom_entities ||= scope.offset(@entity_pages.offset).limit(@entity_pages.per_page).to_a
     respond_to do |format|
       format.html {}
