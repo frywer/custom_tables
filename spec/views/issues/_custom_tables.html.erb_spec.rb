@@ -20,7 +20,6 @@ RSpec.describe "issues/_custom_tables" do
   end
 
   context 'with permission' do
-
     before(:each) do
       allow_any_instance_of(User).
           to receive(:allowed_to?).and_return(true)
@@ -32,5 +31,4 @@ RSpec.describe "issues/_custom_tables" do
       expect(rendered).to match /#{custom_table.name}/
     end
   end
-
 end

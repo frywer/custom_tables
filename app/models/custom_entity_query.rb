@@ -1,5 +1,4 @@
 class CustomEntityQuery < Query
-
   self.queried_class = CustomEntity
   self.view_permission = :show_tables
 
@@ -85,5 +84,4 @@ class CustomEntityQuery < Query
       "#{CustomEntity.table_name}.issue_id IS NOT NULL"
     end
   end
-
 end

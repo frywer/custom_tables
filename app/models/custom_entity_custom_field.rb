@@ -1,5 +1,4 @@
 class CustomEntityCustomField < CustomField
-
   clear_validators!
   validates_presence_of :name, :field_format
   validates_uniqueness_of :name, scope: :custom_table_id
@@ -27,5 +26,4 @@ class CustomEntityCustomField < CustomField
   def ensure_position
     self.position = custom_table.custom_fields.count.next
   end
-
 end
