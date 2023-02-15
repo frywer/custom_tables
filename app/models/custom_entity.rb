@@ -34,7 +34,8 @@ class CustomEntity < ActiveRecord::Base
   end
 
   def visible?(user = User.current)
-    user.allowed_to?(:view_and_manage_entities, nil, global: true)
+    user.allowed_to?(:view_custom_tables, nil, global: true) ||
+      user.allowed_to?(:manage_custom_tables, nil, global: true)
   end
 
   def deletable?(user = nil)
@@ -53,6 +54,10 @@ class CustomEntity < ActiveRecord::Base
   end
 
   def notified_users
+    []
+  end
+
+  def notified_mentions
     []
   end
 
@@ -95,5 +100,4 @@ class CustomEntity < ActiveRecord::Base
     values["id"] = id
     values
   end
-
 end

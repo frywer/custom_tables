@@ -28,6 +28,4 @@ RSpec.describe "custom_tables/new" do
     render
     expect(rendered).to match /#{custom_table.roles.first.name}/
   end
-
-
 end

@@ -4,7 +4,7 @@
 ENV['RAILS_ENV'] ||= 'test'
 
 #load rails/redmine
-require File.expand_path('../../../../config/environment', __FILE__)
+require File.expand_path(Dir.pwd + "/config/environment", __FILE__)
 
 #test gems
 require 'rspec/rails'
