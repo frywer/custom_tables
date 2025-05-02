@@ -20,7 +20,7 @@ end
 
 Redmine::MenuManager.map :admin_menu do |menu|
   menu.push :custom_tables, :custom_tables_path, caption: :label_custom_tables,
-            :html => {:class => 'icon icon-package'}
+            :html => {:class => Redmine::VERSION::MAJOR > 5 ? 'icon' : 'icon icon-package'}
 end
 
 Dir[File.join(File.dirname(__FILE__), '/lib/custom_tables/**/*.rb')].each { |file| require_dependency file }

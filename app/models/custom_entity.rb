@@ -1,4 +1,4 @@
-class CustomEntity < ActiveRecord::Base
+class CustomEntity < CustomTables::ActiveRecordClass.base
   include Redmine::SafeAttributes
   include CustomTables::ActsAsJournalize
 
