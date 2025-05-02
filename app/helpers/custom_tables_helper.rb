@@ -12,6 +12,14 @@ module CustomTablesHelper
     end
   end
 
+  def sprite_icon(icon_name, label = nil, icon_only: false, size: 0, css_class: nil, sprite: 0, plugin: nil, rtl: false)
+    if label
+      label
+    else
+      ''
+    end
+  end
+
   def render_custom_table_content(column, entity)
     value = column.value_object(entity)
     if value.is_a?(Array)

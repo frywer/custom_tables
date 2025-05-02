@@ -1,7 +1,7 @@
 <div class="contextual">
-  <%= link_to l(:label_settings), edit_custom_table_path(@custom_table), class: 'icon icon-settings' %>
-  <%= link_to l(:label_new_column), new_table_field_path(custom_table_id: @custom_table), remote: true, class: 'icon icon-custom-fields' %>
-  <%= link_to l(:label_new), new_custom_entity_path(custom_table_id: @custom_table), remote: true, class: 'icon icon-add' %>
+  <%= link_to sprite_icon('settings', l(:label_settings)), edit_custom_table_path(@custom_table), class: 'icon icon-settings' %>
+  <%= link_to sprite_icon('custom-fields', l(:label_new_column)), new_table_field_path(custom_table_id: @custom_table), remote: true, class: 'icon icon-custom-fields' %>
+  <%= link_to sprite_icon('add', l(:label_new)), new_custom_entity_path(custom_table_id: @custom_table), remote: true, class: 'icon icon-add' %>
 </div>
 
 <%= title [l(:label_custom_tables), custom_tables_path], @custom_table.name %>

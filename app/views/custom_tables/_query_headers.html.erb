@@ -42,8 +42,8 @@
     </fieldset>
   </div>
   <p class="buttons">
-    <%= link_to_function l(:button_apply), '$("#query_form").submit()', :class => 'icon icon-checked' %>
-    <%= link_to l(:button_clear), { :set_filter => 1, :sort => '', :project_id => @project }, :class => 'icon icon-reload'  %>
+    <%= link_to_function sprite_icon('checked', l(:button_apply)), '$("#query_form").submit()', :class => 'icon icon-checked' %>
+    <%= link_to sprite_icon('reload', l(:button_clear)), { :set_filter => 1, :sort => '', :project_id => @project }, :class => 'icon icon-reload'  %>
     <%= form_tag({}, method: :get) do %>
       <%= text_field_tag 'name_like', params[:name_like], size: 30 %>
       <%= submit_tag l(:label_search), class: "small", name_like: nil %>

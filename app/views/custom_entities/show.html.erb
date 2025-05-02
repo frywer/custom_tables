@@ -1,8 +1,8 @@
 <div class="contextual">
   <%= call_hook(:view_custom_table_table_field_action_menu) %>
-  <%= link_to l(:button_edit), edit_custom_entity_path(@custom_entity, back_url: custom_entity_path(@custom_entity)), remote: true, class: 'icon icon-edit' %>
-  <%= link_to l(:button_new_comment), new_note_custom_entity_path(@custom_entity), remote: true, class: 'icon icon-issue-edit' %>
-  <%= link_to l(:button_delete), custom_entity_path(@custom_entity, custom_table_id: @custom_entity.custom_table), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon icon-del' %>
+  <%= link_to sprite_icon('edit', l(:button_edit)), edit_custom_entity_path(@custom_entity, back_url: custom_entity_path(@custom_entity)), remote: true, class: 'icon icon-edit' %>
+  <%= link_to sprite_icon('issue-edit',l(:button_new_comment)), new_note_custom_entity_path(@custom_entity), remote: true, class: 'icon icon-issue-edit' %>
+  <%= link_to sprite_icon('del', l(:button_delete)), custom_entity_path(@custom_entity, custom_table_id: @custom_entity.custom_table), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon icon-del' %>
 </div>
 
 <%= title [l(:label_custom_tables), custom_tables_path],
