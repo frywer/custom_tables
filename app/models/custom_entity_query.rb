@@ -29,7 +29,15 @@ class CustomEntityQuery < Query
     add_available_filter "updated_at", type: :date, label: :field_updated_on
     add_available_filter "author_id", type: :list, values: lambda { author_values }
 
-    CustomEntityCustomField.visible.where(is_filter: true, custom_table_id: custom_table_id).sorted.each do |field|
+    visible_custom_fields = CustomEntityCustomField.visible.where(is_filter: true)
+
+    if custom_table_id
+      # when requesting available values for custom field there is no custom_table_id
+      # so we don't need to overwrite action QueriesController#filters
+      visible_custom_fields = visible_custom_fields.where(custom_table_id: custom_table_id).sorted
+    end
+
+    visible_custom_fields.each do |field|
       add_custom_field_filter(field)
     end
   end
@@ -83,5 +91,9 @@ class CustomEntityQuery < Query
     when "*"
       "#{CustomEntity.table_name}.issue_id IS NOT NULL"
     end
+  end
+
+  def users
+    User.active
   end
 end
