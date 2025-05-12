@@ -2,7 +2,7 @@
 <ul>
   <% if @custom_entity %>
     <% if User.current.admin? %>
-      <li><%= context_menu_link sprite_icon('bullet-go', l(:label_open_issues)), custom_entity_path(@custom_entity), class: 'icon icon-arrow-right' %></li>
+      <li><%= context_menu_link sprite_icon('bullet-go', l(:label_open_issues)), custom_entity_path(@custom_entity), class: Redmine::VERSION::MAJOR > 5 ? 'icon' : 'icon icon-arrow-right' %></li>
     <% end %>
     <li><%= context_menu_link sprite_icon('edit', l(:button_edit)), edit_custom_entity_path(@custom_entity, edit_query: true, back_url: params[:back_url]),
                               remote: true, class: 'icon icon-edit', disabled: !@can[:edit] %></li>

@@ -22,7 +22,7 @@
           <%= raw query.inline_columns.map {|column| "<td class=\"#{column.css_classes}\">#{column_content(column, entity)}</td>"}.join %>
           <td class="buttons">
             <% if User.current.admin? %>
-              <%= link_to sprite_icon('bullet-go', l(:button_show)), custom_entity_path(entity), title: l(:button_show), class: 'icon-only icon-arrow-right' %>
+              <%= link_to sprite_icon('bullet-go', l(:button_show)), custom_entity_path(entity), title: l(:button_show), class: Redmine::VERSION::MAJOR > 5 ? 'icon-only' : 'icon-only icon-arrow-right' %>
             <% end %>
             <% if User.current.allowed_to?(:manage_custom_tables, nil, global: true) %>
               <%= link_to sprite_icon('edit', l(:button_edit)), edit_custom_entity_path(entity, edit_query: true, back_url: back_url), remote: true, title: l(:button_edit), class: 'icon-only icon-edit' %>
