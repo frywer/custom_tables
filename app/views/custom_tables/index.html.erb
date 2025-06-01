@@ -1,5 +1,5 @@
 <div class="contextual">
-  <%= link_to l(:label_custom_table_new), new_custom_table_path, remote: true, class: 'icon icon-add' %>
+  <%= link_to sprite_icon('add', l(:label_custom_table_new)), new_custom_table_path, remote: true, class: 'icon icon-add' %>
 </div>
 
 <%= title l(:label_glad_custom_tables) %>
@@ -9,7 +9,7 @@
     <%= text_field_tag 'name_like', params[:name_like], size: 30 %>
     <%= submit_tag l(:button_apply), class: "small", name_like: nil %>
   <% end %>
-  <%= link_to l(:button_clear), custom_tables_path, :class => 'icon icon-reload' %>
+  <%= link_to sprite_icon('reload', l(:button_clear)), custom_tables_path, :class => 'icon icon-reload' %>
 </fieldset>
 <br>
 
@@ -29,8 +29,8 @@
       <tr class="<%= table.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %> ">
         <%= raw @query.inline_columns.map {|column| "<td class=\"#{column.css_classes}\"><span> #{render_custom_table_content(column, table)}</span></td>"}.join %>
         <td class="buttons">
-          <%= link_to l(:button_edit), edit_custom_table_path(table), title: l(:label_settings), class: 'icon-only icon-settings' %>
-          <%= link_to l(:button_delete), custom_table_path(table, back_url: custom_tables_path), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
+          <%= link_to sprite_icon('settings', l(:button_edit)), edit_custom_table_path(table), title: l(:label_settings), class: 'icon-only icon-settings' %>
+          <%= link_to sprite_icon('del', l(:button_delete)), custom_table_path(table, back_url: custom_tables_path), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
         </td>
       </tr>
     <% end -%>

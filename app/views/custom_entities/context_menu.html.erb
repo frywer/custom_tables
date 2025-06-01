@@ -2,11 +2,12 @@
 <ul>
   <% if @custom_entity %>
     <% if User.current.admin? %>
-      <li><%= context_menu_link l(:button_show), custom_entity_path(@custom_entity), class: 'icon-show' %></li>
+      <li><%= context_menu_link sprite_icon('bullet-go', l(:label_open_issues)), custom_entity_path(@custom_entity), class: Redmine::VERSION::MAJOR > 5 ? 'icon' : 'icon icon-arrow-right' %></li>
     <% end %>
-      <li><%= context_menu_link l(:button_edit), edit_custom_entity_path(@custom_entity, edit_query: true, back_url: params[:back_url]), remote: true, class: 'icon icon-edit', disabled: !@can[:edit] %></li>
+    <li><%= context_menu_link sprite_icon('edit', l(:button_edit)), edit_custom_entity_path(@custom_entity, edit_query: true, back_url: params[:back_url]),
+                              remote: true, class: 'icon icon-edit', disabled: !@can[:edit] %></li>
   <% else %>
-      <li><%= context_menu_link l(:button_edit), bulk_edit_custom_entities_path(ids: @custom_entity_ids, back_url: @back), remote: true, class: 'icon icon-edit' %></li>
+      <li><%= context_menu_link sprite_icon('edit', l(:button_edit)), bulk_edit_custom_entities_path(ids: @custom_entity_ids, back_url: @back), remote: true, class: 'icon icon-edit' %></li>
   <% end %>
   <li class="folder">
     <a href="#" class="submenu"><%= l(:field_export) %></a>
@@ -16,5 +17,5 @@
       <%= call_hook(:view_context_menu_custom_entities_export, { ids: @custom_entity_ids, back_url: @back, params: params, class_name: class_name }) %>
     </ul>
   </li>
-  <li><%= context_menu_link l(:button_delete), custom_entities_path(ids: @custom_entity_ids, back_url: @back), method: :delete, data: {confirm: l(:text_are_you_sure)}, class: 'icon icon-del', disabled: !@can[:delete] %></li>
+  <li><%= context_menu_link sprite_icon('del', l(:button_delete)), custom_entities_path(ids: @custom_entity_ids, back_url: @back), method: :delete, data: {confirm: l(:text_are_you_sure)}, class: 'icon icon-del', disabled: !@can[:delete] %></li>
 </ul>

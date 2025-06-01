@@ -1,4 +1,4 @@
-class CustomTable < ActiveRecord::Base
+class CustomTable < CustomTables::ActiveRecordClass.base
   include Redmine::SafeAttributes
 
   belongs_to :author, class_name: 'User', foreign_key: 'author_id'
