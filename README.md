@@ -6,8 +6,6 @@ This plugin provides a possibility to create custom tables. The table is built w
 <img src="custom_tables_v2.png" width="800"/>
 
 [Online demo](https://redmineplus.com/sign-up-to-redmine-plus/)
-* **login:** admin
-* **password:** admin 
 
 Features
 -------------
