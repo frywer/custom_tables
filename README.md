@@ -3,9 +3,9 @@ Redmine Custom Tables
 
 This plugin provides a possibility to create custom tables. The table is built with Redmine custom fields. It allows you to create any databases you need for your business and integrate it into your workflow processes.
 
-<img src="custom_tables.jpg" width="800"/>
+<img src="custom_tables_v2.png" width="800"/>
 
-[Online demo](https://redmine-app.com/custom_tables)
+[Online demo](https://redmineplus.com/sign-up-to-redmine-plus/)
 * **login:** admin
 * **password:** admin 
 
@@ -23,7 +23,7 @@ Features
 
 Compatibility
 -------------
-* Redmine 4.0.0 or higher
+* Redmine 5.0.0 or higher
 
 Installation and Setup
 ----------------------
