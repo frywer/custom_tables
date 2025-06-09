@@ -105,7 +105,7 @@ when "IssueCustomField" %>
   <fieldset class="box" id="custom_field_project_ids"><legend><%= l(:label_project_plural) %></legend>
     <% project_ids = @custom_field.project_ids.to_a %>
     <%= render_project_nested_lists(Project.all) do |p|
-      content_tag('label', check_box_tag('custom_field[project_ids][]', p.id, project_ids.include?(p.id), :id => nil) + ' ' + p)
+      content_tag('label', check_box_tag('custom_field[project_ids][]', p.id, project_ids.include?(p.id), :id => nil) + ' ' + p.to_s)
     end %>
     <%= hidden_field_tag('custom_field[project_ids][]', '', :id => nil) %>
     <p><%= check_all_links 'custom_field_project_ids' %></p>

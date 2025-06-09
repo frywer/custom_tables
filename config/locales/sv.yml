@@ -1,0 +1,30 @@
+sv:
+  # my_label: "Min rubrik"
+  label_id: ID
+  label_custom_tables: Custom tables
+  label_glad_custom_tables: Anpassade tabeller
+  label_custom_table_new: Ny tabell
+  label_custom_table: Anpassad tabell
+  label_table: Tabell
+  label_custom_table_edit: Redigera tabell
+  glad_custom_tables: Anpassade tabeller
+  custom_tables: Anpassade tabeller
+  label_custom_entity_edit: Redigera %{name}
+  label_custom_entity_new: Ny %{name}
+  label_custom_table_tab: '%{name}'
+  button_edit_custom_table: Redigera tabell
+  button_delete_custom_table: Ta bort tabell
+  label_custom_field_edit: Redigera anpassat fält
+  field_main_custom_field: Huvudkolumn
+  label_belongs_to: Tillhör
+  field_parent_table: Tabell
+  label_bulk_edit_selected: Massredigera valda %{table_name}
+  label_new_column: Ny kolumn
+  label_all_tables: Alla tabeller
+  help_please_configure_table_first: Det finns inte några anpassade fält i denna tabell. %{settings}
+  label_add: Lägg till
+  button_new_comment: Ny kommentar
+  label_new_note: Ny kommentar
+  field_external_name: Externt namn
+  field_export: Exportera
+  text_missing_permission_manage_custom_tables: Du har ej rättigheter att ändra anpassade tabeller!

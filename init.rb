@@ -2,7 +2,7 @@ Redmine::Plugin.register :custom_tables do
   name 'Custom Tables plugin'
   author 'Ivan Marangoz'
   description 'This is a plugin for Redmine'
-  version '1.1.0'
+  version '1.1.1'
   requires_redmine :version_or_higher => '3.4.0'
   url 'https://github.com/frywer/custom_tables'
   author_url 'https://github.com/frywer'
