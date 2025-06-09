@@ -28,3 +28,5 @@ sv:
   field_external_name: Externt namn
   field_export: Exportera
   text_missing_permission_manage_custom_tables: Du har ej rättigheter att ändra anpassade tabeller!
+  field_name: Namn
+  field_created_on: Skapad

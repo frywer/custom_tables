@@ -29,3 +29,5 @@ es:
   field_external_name: Nombre externo
   field_export: Exportar
   text_missing_permission_manage_custom_tables: ¡Sin permiso para administrar tablas personalizadas!
+  field_name: Nombre
+  field_created_on: Creado el
