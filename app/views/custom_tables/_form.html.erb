@@ -48,7 +48,7 @@
     <div id="custom_field_project_ids">
       <% project_ids = @custom_table.project_ids.to_a %>
       <%= render_project_nested_lists(Project.all) do |p|
-        content_tag('label', check_box_tag('custom_table[project_ids][]', p.id, project_ids.include?(p.id), :id => nil, class: 'custom_table_project_checkbox', disabled: f.object.is_for_all) + ' ' + p)
+        content_tag('label', check_box_tag('custom_table[project_ids][]', p.id, project_ids.include?(p.id), :id => nil, class: 'custom_table_project_checkbox', disabled: f.object.is_for_all) + ' ' + p.to_s)
       end %>
       <%= hidden_field_tag('custom_table[project_ids][]', '', :id => nil) %>
     </div>
